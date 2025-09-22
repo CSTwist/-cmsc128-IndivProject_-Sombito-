@@ -3,19 +3,19 @@
 
 {% block content %}
     {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="flashes">
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
+        {% if messages %}      
+            <div class="user-login-message">
+                <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            </div>
         {% endif %}
     {% endwith%}  
 
     <h1>Welcome, {{ session['user'] }}!</h1>
     <p>This is your user dashboard.</p>
-
-    
 
 
     <a href="{{ url_for('logout') }}">Logout</a>

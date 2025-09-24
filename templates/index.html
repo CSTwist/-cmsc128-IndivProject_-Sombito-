@@ -3,7 +3,8 @@
 
 {% block content %}
     {% with messages = get_flashed_messages() %}
-        {% if messages %}      
+        {% if messages %}
+            <!-- LOGIN MESSAGE -->
             <div class="user-login-message">
                 <ul class="flashes">
                 {% for message in messages %}
@@ -73,11 +74,40 @@
         </div>
     </div>
 
-
     <div class="add-task-button">
-        <button class="btn btn-lg add-btn" title="Add Task">
+        <button class="btn btn-lg add-btn" type="button" data-bs-toggle="modal" data-bs-target="#addTaskModal" title="Add Task">
             <i class="bi bi-plus-circle-fill"></i>
         </button>
     </div>
+
+    <!-- Add Task Modal -->
+<div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTaskModalLabel">Add New Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{ url_for('add_task') }}" method="POST">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="taskName" class="form-label">Task Name</label>
+            <input type="text" class="form-control" id="taskName" name="taskName" required>
+          </div>
+          <div class="mb-3">
+            <label for="deadline" class="form-label">Deadline</label>
+            <input type="date" class="form-control" id="deadline" name="deadline" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- <script src="{{ url_for('static', filename='js/add_task.js') }}" ></script> -->
 
 {% endblock %}

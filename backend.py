@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, session, flash
+from flask import Flask, jsonify, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
 
 app = Flask(__name__)
@@ -32,6 +32,13 @@ def user():
     else:
         flash("You are not logged in!", "danger")
         return redirect(url_for("login"))
+    
+@app.route("/add_task", methods=["POST"])
+def add_task():
+    taskName = request.form['taskName']
+    deadline = request.form['deadline']
+    # code for the database 
+    return jsonify({'taskName' : taskName, 'deadline' : deadline})
 
 @app.route("/logout")
 def logout():

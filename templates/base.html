@@ -11,10 +11,8 @@
         <div class="offcanvas offcanvas-start show custom" id="offcanvasWithBothOptions" data-bs-scroll="true" 
         data-bs-backdrop="false" style="visibility: visible; position: static; transform: none; width: 250px;">
         <div class="offcanvas-header">
-            <h4 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
-            <!-- <a href="/" class="text-decoration-none link-light">Home</a> -->
-                -LOGO PLACEHOLDER-
-            </h4>
+            <img src="{{ url_for('static', filename='images/WebApp LOGO.png') }}" 
+            alt="Logo" class="logo img-fluid d-block mx-auto rounded-circle">
         </div>
         <div class="offcanvas-body">
             <a href="{{ url_for('profile') }}" class="d-block mb-2 text-decoration-none" id="profile">Profile</a>
@@ -24,6 +22,7 @@
             <button class="mb-2 text-decoration-none" data-bs-toggle="modal" data-bs-target="#logoutModal">
                 Logout
             </button>
+            <p class="company-footer">@Created by Sophe and Chak</p>
         </div>
     </div>
 

@@ -1,0 +1,46 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+
+
+/* base.html */
+
+.offcanvas-body {
+    color: #D9D9D9;
+
+}
+
+/* .sidebar-custom {
+    background-color: #422701;
+    width: 293px;
+    height: 1142px;
+    flex-shrink: 0;
+    
+} */
+
+.suse-mono-title {
+    font-family: "SUSE Mono", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-size: 40px;
+    font-style: normal;
+    color: #422701;
+    text-align: center;
+    margin: 1vw;
+}
+
+
+.offcanvas-body {
+    margin: 3vw;
+}
+
+.offcanvas-title {
+    margin-top: 2vw;
+    margin-left: 3vw;
+}
+
+.offcanvas-body {
+    margin: 3vw;
+    padding: 1.5vw 0;
+}

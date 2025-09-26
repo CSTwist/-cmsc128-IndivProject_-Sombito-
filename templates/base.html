@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="d-flex">
-        <div class="offcanvas-start show" id="offcanvasWithBothOptions" style="visibility: visible; position: static; transform: none; width: 250px;">
+        <div class="offcanvas offcanvas-start show sidebar-custom" id="offcanvasWithBothOptions" style="visibility: visible; position: static; transform: none; width: 250px;">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
             <a href="/" class="text-decoration-none text-dark">Home</a>
@@ -17,7 +17,7 @@
         <div class="offcanvas-body">
             <a href="{{ url_for('user') }}" class="d-block mb-2 text-decoration-none text-body">Profile</a>
             <a href="{{ url_for('home') }}" class="d-block mb-2 text-decoration-none text-body">Dashboard</a>
-            <a href="{{ url_for('logout') }}" class="d-block mb-2 text-decoration-none text-body">Log Out</a>
+            <a href="{{ url_for('logout') }}" class="d-block mb-2 text-decoration-none text-body" id="logout">Log Out</a>
         </div>
     </div>
 

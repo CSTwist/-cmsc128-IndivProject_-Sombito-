@@ -7,9 +7,10 @@
             <!-- LOGIN MESSAGE -->
             <div class="user-login-message">
                 <ul class="flashes">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+
+                    {% endfor %}
                 </ul>
             </div>
         {% endif %}
@@ -18,19 +19,19 @@
     <h1 class="suse-mono-title">TO DO LIST APP</h1>
 
     <div class="dashboard-message">
-        <h1>Welcome {{ session['user'] }}!</h1>
+        <h3>Welcome {{ session['user'] }}!</h3>
         <p>This is your user dashboard.</p>
     </div>
     
     <div class="container">
         <!-- TABLE HEADER -->
-        <div class="row fw-bold border-bottom pb-2 mb-3">
-            <div class="col-1 text-center">
+        <div class="table-header row border-bottom pb-2 mb-3">
+            <div class="checkbox-header col-1 text-center">
                 <input class="form-check-input" type="checkbox" checked disabled>
             </div>
-            <div class="col-5">Task</div>
-            <div class="col-3">Deadline</div>
-            <div class="col-2 text-center">Actions</div>
+            <div class="task-header col-5">Task</div>
+            <div class="deadline-header col-3">Deadline</div>
+            <div class="action-header col-2 text-center">Actions</div>
         </div>
 
         <!-- TASK CARD #1 -->
@@ -38,15 +39,15 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-1 text-center">
-                        <input class="form-check-input" type="checkbox">
+                        <input class="checkbox form-check-input" type="checkbox">
                     </div>
-                    <div class="col-5">Finish Problem Set 1</div>
-                    <div class="col-3">September 26, 2025</div>
-                    <div class="col-2 text-center">
-                        <button class="btn btn-sm btn-outline-primary edit-btn" title="Edit Task">
+                    <div class="task-name col-5">Finish Problem Set 1</div>
+                    <div class="deadline col-3">September 26, 2025</div>
+                    <div class="actions col-2 text-center">
+                        <button class="edit-task btn btn-sm btn-outline-primary edit-btn" title="Edit Task">
                             <i class="bi bi-pencil-square"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger delete-btn" title="Delete Task">
+                        <button class="delete-task btn btn-sm btn-outline-danger delete-btn" title="Delete Task">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
@@ -59,15 +60,15 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-1 text-center">
-                        <input class="form-check-input" type="checkbox">
+                        <input class="checkbox form-check-input" type="checkbox">
                     </div>
-                    <div class="col-5">Read DCN Chapter 3</div>
-                    <div class="col-3">September 25, 2025</div>
-                    <div class="col-2 text-center">
-                        <button class="btn btn-sm btn-outline-primary edit-btn" title="Edit Task">
+                    <div class="task-name col-5">Read DCN Chapter 3</div>
+                    <div class="deadline col-3">September 26, 2025</div>
+                    <div class="actions col-2 text-center">
+                        <button class="edit-task btn btn-sm btn-outline-primary edit-btn" title="Edit Task">
                             <i class="bi bi-pencil-square"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger delete-btn" title="Delete Task">
+                        <button class="delete-task btn btn-sm btn-outline-danger delete-btn" title="Delete Task">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
@@ -78,8 +79,10 @@
 
     <div class="add-task-button">
         <button class="btn btn-lg add-btn" type="button" data-bs-toggle="modal" data-bs-target="#addTaskModal" title="Add Task">
-            <i class="bi bi-plus-circle-fill"></i>
+            <i class="bi bi-plus-circle-fill" aria-hidden="true"></i>
+            <span class="btn-add-task">Add Task</span>
         </button>
+        
     </div>
 
     <!-- Add Task Modal -->

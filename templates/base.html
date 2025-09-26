@@ -6,47 +6,51 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body>
+<body class="lexend-main-section">
     <div class="d-flex">
-        <div class="offcanvas offcanvas-start show sidebar-custom" id="offcanvasWithBothOptions" style="visibility: visible; position: static; transform: none; width: 250px;">
+        <div class="offcanvas offcanvas-start show custom" id="offcanvasWithBothOptions" data-bs-scroll="true" 
+        data-bs-backdrop="false" style="visibility: visible; position: static; transform: none; width: 250px;">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
-            <a href="/" class="text-decoration-none text-dark">Home</a>
-            </h5>
+            <h4 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
+            <!-- <a href="/" class="text-decoration-none link-light">Home</a> -->
+                -LOGO PLACEHOLDER-
+            </h4>
         </div>
         <div class="offcanvas-body">
-            <a href="{{ url_for('profile') }}" class="d-block mb-2 text-decoration-none text-body">Profile</a>
-            <a href="{{ url_for('home') }}" class="d-block mb-2 text-decoration-none text-body">Dashboard</a>
-        </div>
-                <!-- Logout Button -->
-        <button class="d-block mb-2 text-decoration-none text-body" data-bs-toggle="modal" data-bs-target="#logoutModal">
-        Logout
-        </button>
-
-        <!-- Logout Confirmation Modal -->
-        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to log out?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a href="{{ url_for('logout') }}" class="btn btn-danger">Yes, Logout</a>
-            </div>
-            </div>
-        </div>
+            <a href="{{ url_for('profile') }}" class="d-block mb-2 text-decoration-none" id="profile">Profile</a>
+            <a href="{{ url_for('home') }}" class="d-block mb-2 text-decoration-none">Dashboard</a>
+        
+            <!-- Logout Button -->
+            <button class="mb-2 text-decoration-none" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                Logout
+            </button>
         </div>
     </div>
 
     <div class="flex-grow-1 p-4">
-        {% block content %}
-        {% endblock %}
+            {% block content %}
+            {% endblock %}
     </div>   
+
+    <!-- Logout Confirmation Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to log out?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <a href="{{ url_for('logout') }}" class="btn btn-danger">Yes, Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

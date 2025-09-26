@@ -1,46 +1,192 @@
 
 
 @import url('https://fonts.googleapis.com/css2?family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap');
-
-
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 /* base.html */
 
-.offcanvas-body {
-    color: #D9D9D9;
-
+.link-light {
+    color: #FDFBD4 !important; 
 }
 
-/* .sidebar-custom {
-    background-color: #422701;
-    width: 293px;
+.custom {
+    background-color: #6b403c;
+    max-width: 293px;
     height: 1142px;
     flex-shrink: 0;
-    
-} */
+}
 
 .suse-mono-title {
     font-family: "SUSE Mono", sans-serif;
     font-optical-sizing: auto;
     font-weight: 800;
-    font-size: 40px;
+    font-size: 35px;
     font-style: normal;
     color: #422701;
     text-align: center;
-    margin: 1vw;
+    margin: 0.2rem;
+    padding: 1rem;
 }
 
-
-.offcanvas-body {
-    margin: 3vw;
+.lexend-main-section {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  background-color: #FDFBD4;
 }
 
 .offcanvas-title {
     margin-top: 2vw;
-    margin-left: 3vw;
+    margin-left: 2rem;
+    color: #FDFBD4 !important; 
+    font-weight: 200;
+}
+.offcanvas.custom h5, .offcanvas.custom a,
+.offcanvas.custom a:link, .offcanvas.custom a:visited
+ {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.5rem;
+    color: #FDFBD4 !important;    
+    text-decoration: none;        
+    font-size: 1.3rem;
+
+    
 }
 
-.offcanvas-body {
-    margin: 3vw;
-    padding: 1.5vw 0;
+.offcanvas.custom .offcanvas-body a:hover {
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.offcanvas.custom button {   
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.5rem;
+    color: #FDFBD4 !important;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.offcanvas.custom .offcanvas-body button:hover {
+  background-color: #ffffff1a;
+  border-radius: 5px;
+}
+
+.offcanvas.custom .offcanvas-body {
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;  
+
+}
+
+/* index.html */
+
+.table-header {
+    font-size: 16px;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.checkbox-header {
+    padding: 0 20px;
+    margin-left: 0;
+}
+
+.task-header {
+    margin-left: 0.5rem;
+}
+
+.task-name {
+    margin-left: 0.5rem;
+}
+
+.card-body {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background-color: #ADEBB3;
+}
+
+.card-body .row {
+    align-items: center;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.task-name, .deadline, .actions {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.btn-outline-danger, .btn-outline-primary {
+    -webkit-text-stroke: 0.3px;
+    border-width: 2px;
+}
+
+.card-body .col-1, .card-body .col-5, 
+.card-body .col-3, .card-body .col-2 {
+    flex: 0 0 auto;
+}
+
+.add-task-button {
+    position: fixed;
+    bottom: 40px;
+    right: 50px;
+    z-index: 1080;
+}
+
+.add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    overflow: hidden;
+    width: 60px;
+    height: 60px;
+    padding: 0 0 0.75rem;
+    transition: width 0.4s ease, background-color 0.3s ease;
+    white-space: nowrap;
+    border-radius: 999px;
+    background-color: #ADEBB3;
+    color: #6b403c;
+    font-size: 1.6rem;
+    box-shadow: 0 10px 18px rgba(0,0,0,0.12);
+}
+
+.bi-plus-circle-fill {
+    font-size: 1.35rem;
+    line-height: 1;
+    color: #6b403c;
+}
+
+.add-btn .btn-add-task {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.3s ease, transform 0.22s ease;
+    margin-left: 0.25rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.add-btn:hover, .add-btn:focus{
+    width: 160px;
+    outline: none;
+}
+
+.add-btn:hover .btn-add-task,
+.add-btn:focus .btn-add-task {
+    opacity: 1;
+    transform: translateX(0);
 }

@@ -7,9 +7,10 @@
             <!-- LOGIN MESSAGE -->
             <div class="user-login-message">
                 <ul class="flashes">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                        
+                    {% endfor %}
                 </ul>
             </div>
         {% endif %}

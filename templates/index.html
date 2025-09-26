@@ -9,6 +9,7 @@
                 <ul class="flashes">
                     {% for message in messages %}
                         <li>{{ message }}</li>
+                        
                     {% endfor %}
                 </ul>
             </div>
@@ -18,7 +19,7 @@
     <h1 class="suse-mono-title">TO DO LIST APP</h1>
 
     <div class="dashboard-message">
-        <h1>Welcome, {{ session['user'] }}!</h1>
+        <h1>Welcome {{ session['user'] }}!</h1>
         <p>This is your user dashboard.</p>
     </div>
     

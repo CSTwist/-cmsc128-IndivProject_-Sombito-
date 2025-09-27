@@ -4,15 +4,14 @@
 {% block content %}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <!-- LOGIN MESSAGE -->
-            <div class="user-login-message">
-                <ul class="flashes">
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-
-                    {% endfor %}
+          <!-- LOGIN MESSAGE -->
+          <div class="user-login-message">
+            <ul class="flashes">
+              {% for message in messages %}
+                <li>{{ message }}</li>
+                  {% endfor %}
                 </ul>
-            </div>
+          </div>
         {% endif %}
     {% endwith%}  
 
@@ -33,7 +32,6 @@
             <div class="deadline-header col-3">Deadline</div>
             <div class="action-header col-2 text-center">Actions</div>
         </div>
-
         <div id="taskContainer"></div>
     </div>
 
@@ -46,76 +44,93 @@
     </div>
 
     <!-- Add Task Modal -->
-<div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addTaskModalLabel">Add New Task</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addTaskModalLabel">Add New Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="addTaskForm">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="taskName" class="form-label">Task Name</label>
+                <input type="text" class="form-control" id="taskName" name="taskName" required>
+              </div>
+              <div class="mb-3">
+                <label for="deadline" class="form-label">Deadline</label>
+                <input type="date" class="form-control" id="deadline" name="deadline" required>
+              </div>
+              <div class="mb-3">
+                <label for="time" class="form-label">Time</label>
+                <input type="time" class="form-control" id="time" name="time" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Add Task</button>
+            </div>
+          </form>
+        </div>
       </div>
-      <form id="addTaskForm">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="taskName" class="form-label">Task Name</label>
-            <input type="text" class="form-control" id="taskName" name="taskName" required>
-          </div>
-          <div class="mb-3">
-            <label for="deadline" class="form-label">Deadline</label>
-            <input type="date" class="form-control" id="deadline" name="deadline" required>
-          </div>
-          <div class="mb-3">
-            <label for="time" class="form-label">Time</label>
-            <input type="time" class="form-control" id="time" name="time" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Add Task</button>
-        </div>
-      </form>
     </div>
-  </div>
-</div>
 
-<!-- Edit Task Modal -->
-<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Edit Task Modal -->
+    <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="editTaskForm">
+            <div class="modal-body">
+              <input type="hidden" id="editTaskId">
+
+              <div class="mb-3">
+                <label for="editTaskName" class="form-label">Task Name</label>
+                <input type="text" class="form-control" id="editTaskName" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="editDeadline" class="form-label">Deadline</label>
+                <input type="date" class="form-control" id="editDeadline" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="editTime" class="form-label">Time</label>
+                <input type="time" class="form-control" id="editTime" required>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </form>
+        </div>
       </div>
-      <form id="editTaskForm">
-        <div class="modal-body">
-          <input type="hidden" id="editTaskId">
-
-          <div class="mb-3">
-            <label for="editTaskName" class="form-label">Task Name</label>
-            <input type="text" class="form-control" id="editTaskName" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="editDeadline" class="form-label">Deadline</label>
-            <input type="date" class="form-control" id="editDeadline" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="editTime" class="form-label">Time</label>
-            <input type="time" class="form-control" id="editTime" required>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
-      </form>
     </div>
-  </div>
-</div>
 
-<script src="{{ url_for('static', filename='js/load_tasks.js') }}"></script>
-<script src="{{ url_for('static', filename='js/add_task.js') }}"></script>
-<script src="{{ url_for('static', filename='js/edit_tasks.js') }}"></script>
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+      <div id="deleteToast" class="toast fade" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <h5 class="me-auto">Task Deleted</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          Task deleted.
+          <div class="mt-2 pt-2 border-top">
+            <button id="undoDelete" type="button" class="btn btn-primary btn-sm btn-link">Undo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <script src="{{ url_for('static', filename='js/load_tasks.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/add_task.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/edit_tasks.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/delete_tasks.js') }}"></script>
 
 {% endblock %}

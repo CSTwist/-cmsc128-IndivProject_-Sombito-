@@ -9,6 +9,10 @@
     color: #FDFBD4 !important; 
 }
 
+.logo {
+    max-height: 70%;
+}
+
 .custom {
     background-color: #6b403c;
     max-width: 293px;
@@ -165,28 +169,39 @@
 }
 
 .bi-plus-circle-fill {
-    font-size: 1.35rem;
+    padding-top: 10px;
+    font-size: 2.5rem;
     line-height: 1;
     color: #6b403c;
 }
 
 .add-btn .btn-add-task {
-    display: inline-block;
+    display: none;
     opacity: 0;
     transform: translateX(-8px);
     transition: opacity 0.3s ease, transform 0.22s ease;
     margin-left: 0.25rem;
+    padding-top: 10px;
     font-weight: 600;
     font-size: 0.95rem;
 }
 
 .add-btn:hover, .add-btn:focus{
     width: 160px;
+    background-color: #ADEBB3;
     outline: none;
 }
 
 .add-btn:hover .btn-add-task,
 .add-btn:focus .btn-add-task {
+    display: inline-block;
     opacity: 1;
     transform: translateX(0);
+}
+
+.company-footer {
+    position: absolute;
+    bottom: 10px;
+    font-size: 0.8rem;
+    color: #FDFBD4;
 }

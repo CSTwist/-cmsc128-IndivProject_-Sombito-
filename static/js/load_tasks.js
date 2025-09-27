@@ -1,11 +1,37 @@
-async function loadTasks() {
+let tasks = [];            // keep tasks in memory
+let currentSort = null;    // remember last selected sort option
+
+async function loadTasks(sortBy = null) {
+  // If no new sort option provided, reuse the last one
+  if (sortBy) {
+    currentSort = sortBy;
+  } else if (currentSort) {
+    sortBy = currentSort;
+  }
+
   const response = await fetch("/tasks");
   if (!response.ok) {
     console.error("Failed to fetch tasks");
     return;
   }
 
-  const tasks = await response.json();
+  tasks = await response.json();
+
+  // Apply sorting if currentSort is set
+  if (sortBy) {
+    tasks.sort((a, b) => {
+      if (sortBy === "name") {
+        return a.name.localeCompare(b.name);
+      } else if (sortBy === "deadline") {
+        return new Date(a.deadline + " " + a.time) - new Date(b.deadline + " " + b.time);
+      } else if (sortBy === "priority") {
+        const order = { High: 1, Medium: 2, Low: 3 };
+        return order[a.priority] - order[b.priority];
+      }
+      return 0;
+    });
+  }
+
   const container = document.getElementById("taskContainer");
   container.innerHTML = "";
 
@@ -19,18 +45,30 @@ async function loadTasks() {
           <div class="col-1 text-center">
             <input class="checkbox form-check-input" type="checkbox">
           </div>
-          <div class="task-name col-5">${task.name}</div>
+          <div class="task-name col-4">
+            ${task.name} 
+            <span class="badge bg-${
+              task.priority === "High"
+                ? "danger"
+                : task.priority === "Medium"
+                ? "warning text-dark"
+                : "success"
+            } ms-2">${task.priority}</span>
+          </div>
           <div class="deadline col-3">${task.deadline} ${task.time}</div>
           <div class="actions col-2 text-center">
             <button class="edit-task btn btn-sm btn-outline-primary" 
                     data-id="${task.id}" 
                     data-name="${task.name}" 
                     data-deadline="${task.deadline}" 
-                    data-time="${task.time}" 
+                    data-time="${task.time}"
+                    data-priority="${task.priority}"
                     title="Edit Task">
               <i class="bi bi-pencil-square"></i>
             </button>
-            <button class="delete-task btn btn-sm btn-outline-danger" data-id="${task.id}" title="Delete Task">
+            <button class="delete-task btn btn-sm btn-outline-danger" 
+                    data-id="${task.id}" 
+                    title="Delete Task">
               <i class="bi bi-trash"></i>
             </button>
           </div>
@@ -39,26 +77,23 @@ async function loadTasks() {
     `;
     container.appendChild(card);
 
-    // // Delete button handler
-    // card.querySelector(".delete-task").addEventListener("click", async (e) => {
-    //   const taskId = e.target.closest("button").getAttribute("data-id");
-    //   if (!confirm("Are you sure you want to delete this task?")) return;
-
-    //   const res = await fetch(`/delete_task/${taskId}`, { method: "DELETE" });
-    //   const result = await res.json();
-    //   if (result.success) loadTasks();
-    //   else alert(result.message);
-    // });
-
     // Edit button handler
     card.querySelector(".edit-task").addEventListener("click", (e) => {
       const btn = e.target.closest("button");
+
       document.getElementById("editTaskId").value = btn.getAttribute("data-id");
       document.getElementById("editTaskName").value = btn.getAttribute("data-name");
       document.getElementById("editDeadline").value = btn.getAttribute("data-deadline");
       document.getElementById("editTime").value = btn.getAttribute("data-time");
 
-      // Show modal
+      const priority = btn.getAttribute("data-priority");
+      const priorityRadio = document.querySelector(
+        `#editTaskForm input[name="priority"][value="${priority}"]`
+      );
+      if (priorityRadio) {
+        priorityRadio.checked = true;
+      }
+
       const editModal = new bootstrap.Modal(document.getElementById("editTaskModal"));
       editModal.show();
     });
@@ -69,4 +104,34 @@ async function loadTasks() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", loadTasks);
+// Checkbox highlight
+document.addEventListener("change", (e) => {
+  if (e.target.classList.contains("checkbox")) {
+    const cardBody = e.target.closest(".card-body");
+    if (e.target.checked) {
+      cardBody.classList.add("checked");
+    } else {
+      cardBody.classList.remove("checked");
+    }
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadTasks(); // initial load
+
+  document.querySelectorAll(".sort-option").forEach(option => {
+    option.addEventListener("click", (e) => {
+      const sortBy = e.target.getAttribute("data-sort");
+
+      // remove active class from all
+      document.querySelectorAll(".sort-option").forEach(opt => {
+        opt.classList.remove("active");
+      });
+
+      // add active class to clicked one
+      e.target.classList.add("active");
+
+      loadTasks(sortBy);
+    });
+  });
+});

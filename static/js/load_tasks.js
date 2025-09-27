@@ -39,16 +39,16 @@ async function loadTasks() {
     `;
     container.appendChild(card);
 
-    // Delete button handler
-    card.querySelector(".delete-task").addEventListener("click", async (e) => {
-      const taskId = e.target.closest("button").getAttribute("data-id");
-      if (!confirm("Are you sure you want to delete this task?")) return;
+    // // Delete button handler
+    // card.querySelector(".delete-task").addEventListener("click", async (e) => {
+    //   const taskId = e.target.closest("button").getAttribute("data-id");
+    //   if (!confirm("Are you sure you want to delete this task?")) return;
 
-      const res = await fetch(`/delete_task/${taskId}`, { method: "DELETE" });
-      const result = await res.json();
-      if (result.success) loadTasks();
-      else alert(result.message);
-    });
+    //   const res = await fetch(`/delete_task/${taskId}`, { method: "DELETE" });
+    //   const result = await res.json();
+    //   if (result.success) loadTasks();
+    //   else alert(result.message);
+    // });
 
     // Edit button handler
     card.querySelector(".edit-task").addEventListener("click", (e) => {
@@ -63,6 +63,10 @@ async function loadTasks() {
       editModal.show();
     });
   });
+
+  if (typeof attachDeleteHandlers === "function") {
+    attachDeleteHandlers();
+  }
 }
 
 document.addEventListener("DOMContentLoaded", loadTasks);

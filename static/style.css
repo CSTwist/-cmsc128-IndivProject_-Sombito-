@@ -198,6 +198,53 @@
     transform: translateX(0);
 }
 
+.toast-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1100;
+}
+
+#deleteToast.toast {
+    background-color: var(--cream);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-family: "Lexend", sans-serif;
+    font-size: 1.25rem;
+    min-width: 280px;
+    text-align: center;
+    padding: 0;
+}
+
+#deleteToast .toast-header {
+    background-color: var(--cream);
+    color: var(--cafe-noir);
+    font-weight: 600;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+}
+
+#deleteToast .toast-body {
+    padding: 1rem;
+    color: var(--cafe-noir);
+    font-size: 1rem;
+}
+
+#deleteToast #undoDelete {
+    color: var(--trunk);
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: transparent;
+    border: none;
+    text-decoration: underline;
+    padding: 0.25rem 0.5rem;
+}
+
+#deleteToast #undoDelete:hover {
+    color: var(--coral-pink);
+}
+
 .company-footer {
     position: absolute;
     bottom: 10px;

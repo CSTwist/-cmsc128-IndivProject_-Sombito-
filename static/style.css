@@ -259,3 +259,7 @@
     font-size: 0.8rem;
     color: var(--cream);
 }
+
+.card-body.checked {
+  background-color: #858c91; /* highlight color */
+}

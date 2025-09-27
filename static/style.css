@@ -120,6 +120,10 @@
     background-color: var(--mint-green);
 }
 
+.card-body:hover, .card-body:active{
+    background-color: #f8c9f8;
+}
+
 .card-body .row {
     align-items: center;
     margin-left: 0;
@@ -211,38 +215,42 @@
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     font-family: "Lexend", sans-serif;
-    font-size: 1.25rem;
-    min-width: 280px;
+    font-size: 1rem;
+    min-width: 300px;
     text-align: center;
     padding: 0;
+    border: 1px solid rgba(0,0,0,0.2);
 }
 
 #deleteToast .toast-header {
-    background-color: var(--cream);
-    color: var(--cafe-noir);
-    font-weight: 600;
-    border-bottom: none;
-    border-radius: 12px 12px 0 0;
+    background-color: #ffffff;
+    color: #212529;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
 }
 
 #deleteToast .toast-body {
     padding: 1rem;
-    color: var(--cafe-noir);
+    color: #212529;
+    background-color: #ffffff;
     font-size: 1rem;
 }
 
 #deleteToast #undoDelete {
-    color: var(--trunk);
-    font-weight: 600;
+    color: var(--timber); /* Bootstrap primary */
+    font-weight: 500;
     font-size: 0.9rem;
     background: transparent;
     border: none;
     text-decoration: underline;
     padding: 0.25rem 0.5rem;
+    transition: color 0.2s ease;
 }
 
 #deleteToast #undoDelete:hover {
-    color: var(--coral-pink);
+    color: #0a58ca;
 }
 
 .company-footer {

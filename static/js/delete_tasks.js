@@ -44,7 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify({
                     taskName: lastDeletedTask.name,
                     deadline: lastDeletedTask.deadline,
-                    time: lastDeletedTask.time
+                    time: lastDeletedTask.time,
+                    created_at: lastDeletedTask.created_at,
+                    priority: lastDeletedTask.priority
                 })
             });
 
@@ -72,14 +74,4 @@ function attachDeleteHandlers(params) {
         });
     });
 
-    // // Delete button handler
-    // card.querySelector(".delete-task").addEventListener("click", async (e) => {
-    //   const taskId = e.target.closest("button").getAttribute("data-id");
-    //   if (!confirm("Are you sure you want to delete this task?")) return;
-
-    //   const res = await fetch(`/delete_task/${taskId}`, { method: "DELETE" });
-    //   const result = await res.json();
-    //   if (result.success) loadTasks();
-    //   else alert(result.message);
-    // });
 }

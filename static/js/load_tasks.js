@@ -52,7 +52,6 @@ async function loadTasks(sortBy = null) {
           <div class="col-1 text-center">
             <input class="checkbox form-check-input" type="checkbox">
           </div>
-          <div class="task-name col-5">
             ${task.name} 
             <span class="badge bg-${
               task.priority === "High"
@@ -144,13 +143,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Asc/Desc button
-  const toggleButton = document.querySelector("#asc-desc-toggle");
   toggleButton.innerHTML = "⬆️ Asc"; // default label
 
   toggleButton.addEventListener("click", () => {
     sortDirection = sortDirection === "asc" ? "desc" : "asc";
     toggleButton.innerHTML = sortDirection === "asc" ? "Ascending" : "Descending";
-    toggleButton.classList.toggle("active", sortDirection === "desc");
 
     loadTasks(); // reload with new direction
   });

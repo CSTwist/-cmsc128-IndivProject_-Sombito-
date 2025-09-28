@@ -1,5 +1,6 @@
-let tasks = [];            // keep tasks in memory
-let currentSort = null;    // remember last selected sort option
+let tasks = [];             // keep tasks in memory
+let currentSort = null;     // remember last selected sort option
+let sortDirection = "asc";  // default ascending
 
 async function loadTasks(sortBy = null) {
   // If no new sort option provided, reuse the last one
@@ -20,22 +21,28 @@ async function loadTasks(sortBy = null) {
   // Apply sorting if currentSort is set
   if (sortBy) {
     tasks.sort((a, b) => {
+      let result = 0;
+
       if (sortBy === "name") {
-        return a.name.localeCompare(b.name);
+        result = a.name.localeCompare(b.name);
       } else if (sortBy === "deadline") {
-        return new Date(a.deadline + " " + a.time) - new Date(b.deadline + " " + b.time);
+        result =
+          new Date(a.deadline + " " + a.time) -
+          new Date(b.deadline + " " + b.time);
       } else if (sortBy === "priority") {
         const order = { High: 1, Medium: 2, Low: 3 };
-        return order[a.priority] - order[b.priority];
+        result = order[a.priority] - order[b.priority];
       }
-      return 0;
+
+      // Apply direction (asc/desc)
+      return sortDirection === "asc" ? result : -result;
     });
   }
 
   const container = document.getElementById("taskContainer");
   container.innerHTML = "";
 
-  tasks.forEach(task => {
+  tasks.forEach((task) => {
     const card = document.createElement("div");
     card.className = "card mb-3";
 
@@ -119,12 +126,13 @@ document.addEventListener("change", (e) => {
 document.addEventListener("DOMContentLoaded", () => {
   loadTasks(); // initial load
 
-  document.querySelectorAll(".sort-option").forEach(option => {
+  // Dropdown sorting
+  document.querySelectorAll(".sort-option").forEach((option) => {
     option.addEventListener("click", (e) => {
       const sortBy = e.target.getAttribute("data-sort");
 
       // remove active class from all
-      document.querySelectorAll(".sort-option").forEach(opt => {
+      document.querySelectorAll(".sort-option").forEach((opt) => {
         opt.classList.remove("active");
       });
 
@@ -133,5 +141,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       loadTasks(sortBy);
     });
+  });
+
+  // Asc/Desc button
+  const toggleButton = document.querySelector(".btn.btn-primary");
+  toggleButton.innerHTML = "⬆️ Asc"; // default label
+
+  toggleButton.addEventListener("click", () => {
+    sortDirection = sortDirection === "asc" ? "desc" : "asc";
+    toggleButton.innerHTML = sortDirection === "asc" ? "Ascending" : "Descending";
+
+    loadTasks(); // reload with new direction
   });
 });

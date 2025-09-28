@@ -52,7 +52,6 @@ async function loadTasks(sortBy = null) {
           <div class="col-1 text-center">
             <input class="checkbox form-check-input" type="checkbox">
           </div>
-          <div class="task-name col-4">
             ${task.name} 
             <span class="badge bg-${
               task.priority === "High"
@@ -144,7 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Asc/Desc button
-  const toggleButton = document.querySelector(".btn.btn-primary");
   toggleButton.innerHTML = "⬆️ Asc"; // default label
 
   toggleButton.addEventListener("click", () => {

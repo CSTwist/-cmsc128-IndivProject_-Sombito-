@@ -136,6 +136,10 @@
     overflow-wrap: break-word;
 }
 
+.task-name {
+    padding: 0.3rem 0;
+}
+
 .btn-outline-danger, .btn-outline-primary {
     -webkit-text-stroke: 0.3px;
     border-width: 2px;

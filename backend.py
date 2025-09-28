@@ -1,5 +1,6 @@
+
 from flask import Flask, jsonify, redirect, url_for, render_template, request, session, flash
-from datetime import timedelta
+from datetime import timedelta, datetime, UTC
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -117,16 +118,21 @@ def add_task():
         task_name = data.get("taskName")
         deadline = data.get("deadline")
         time = data.get("time")
-        created_at = data.get("createdAt")
+        created_at = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")
+
         priority = data.get("priority")
+        if not priority:
+            return jsonify({"success": False, "message": "Priority is required"}), 400
 
         new_task = Task(name=task_name, deadline=deadline, time=time, created_at=created_at, priority=priority)
         db.session.add(new_task)
         db.session.commit()
 
         return redirect(url_for("home"))
+        # return jsonify({"success": True, "message": "Task added"})
     else:
         return jsonify({"error": "Unsupported Media Type"}), 415
+
 
 @app.route("/tasks", methods=["GET"])
 def get_tasks():

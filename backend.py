@@ -1,3 +1,4 @@
+
 from flask import Flask, jsonify, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
@@ -22,20 +23,26 @@ class users(db.Model):
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    deadline = db.Column(db.String(20), nullable=False)
-    time = db.Column(db.String(10), nullable=False)
+    deadline = db.Column(db.String(20), nullable=False)   # deadline date
+    time = db.Column(db.String(10), nullable=False)       # deadline time
+    created_at = db.Column(db.String(10), nullable=False) # time task was created
+    priority = db.Column(db.String(10), nullable=False)   # task priority
 
-    def __init__(self, name, deadline, time):
+    def __init__(self, name, deadline, time, created_at, priority):
         self.name = name
         self.deadline = deadline
         self.time = time
+        self.created_at = created_at
+        self.priority = priority
     
     def to_dict(self):
         return {
             "id": self.id,
             "name": self.name,
             "deadline": self.deadline,
-            "time": self.time
+            "time": self.time,
+            "created_at": self.created_at,
+            "priority": self.priority
         }
 
 @app.route("/")
@@ -111,12 +118,14 @@ def add_task():
         task_name = data.get("taskName")
         deadline = data.get("deadline")
         time = data.get("time")
+        created_at = data.get("createdAt")
+        priority = data.get("priority")
 
-        new_task = Task(name=task_name, deadline=deadline, time=time)
+        new_task = Task(name=task_name, deadline=deadline, time=time, created_at=created_at, priority=priority)
         db.session.add(new_task)
         db.session.commit()
 
-        return jsonify({"success": True, "message": "Task added"})
+        return redirect(url_for("home"))
     else:
         return jsonify({"error": "Unsupported Media Type"}), 415
 
@@ -146,6 +155,7 @@ def edit_task(task_id):
     task.name = data.get("taskName", task.name)
     task.deadline = data.get("deadline", task.deadline)
     task.time = data.get("time", task.time)
+    task.priority = data.get("priority", task.priority)
 
     db.session.commit()
     return jsonify({"success": True, "message": "Task updated"})

@@ -1,3 +1,4 @@
+
 {% extends "base.html"%}
 {% block title %} Dashboard {% endblock %}
 
@@ -20,6 +21,20 @@
     <div class="dashboard-message">
         <h3>Welcome {{ session['user'] }}!</h3>
         <p>This is your user dashboard.</p>
+    </div>
+
+    <div class="sort">
+    <div class="dropdown mb-3">
+      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+        Sort by
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item sort-option" data-sort="name">Name</a></li>
+        <li><a class="dropdown-item sort-option" data-sort="deadline">Deadline</a></li>
+        <li><a class="dropdown-item sort-option" data-sort="priority">Priority</a></li>
+      </ul>
+    </div>
+    <button type="button" class="btn btn-outline-secondary" id="asc-desc-toggle"></button>
     </div>
     
     <div class="container">
@@ -64,6 +79,25 @@
               <div class="mb-3">
                 <label for="time" class="form-label">Time</label>
                 <input type="time" class="form-control" id="time" name="time" required>
+                <input type="hidden" id="currentTime" name="time">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Priority</label>
+
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" id="high" name="priority" value="High" required>
+                  <label class="form-check-label" for="high">High</label>
+                </div>
+
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" id="medium" name="priority" value="Medium" required>
+                  <label class="form-check-label" for="medium">Medium</label>
+                </div>
+
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" id="low" name="priority" value="Low" required>
+                  <label class="form-check-label" for="low">Low</label>
+                </div>
               </div>
             </div>
             <div class="modal-footer">
@@ -100,6 +134,25 @@
               <div class="mb-3">
                 <label for="editTime" class="form-label">Time</label>
                 <input type="time" class="form-control" id="editTime" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Priority</label>
+
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" id="editHigh" name="priority" value="High" required>
+                  <label class="form-check-label" for="editHigh">High</label>
+                </div>
+
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" id="editMedium" name="priority" value="Medium" required>
+                  <label class="form-check-label" for="editMedium">Medium</label>
+                </div>
+
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" id="editLow" name="priority" value="Low" required>
+                  <label class="form-check-label" for="editLow">Low</label>
+                </div>
               </div>
             </div>
 

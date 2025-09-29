@@ -135,6 +135,12 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
+.deadline {
+    margin-left: 4.5rem;
+}
+.actions {
+    margin-left: 2rem;
+}
 
 .task-name {
     padding: 0.3rem 0;

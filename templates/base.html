@@ -11,8 +11,9 @@
         <div class="offcanvas offcanvas-start show custom" id="offcanvasWithBothOptions" data-bs-scroll="true" 
         data-bs-backdrop="false" style="visibility: visible; position: static; transform: none; width: 250px;">
         <div class="offcanvas-header">
-            <img src="{{ url_for('static', filename='images/WebApp LOGO.png') }}" 
+            <img src="{{ url_for('static', filename='images/WebApp LOGO.png') }}"
             alt="Logo" class="logo img-fluid d-block mx-auto rounded-circle">
+            <h3 class="offcanvas-title" id="offcanvasLabel">LeafList</h3>
         </div>
         <div class="offcanvas-body">
             <a href="{{ url_for('profile') }}" class="d-block mb-2 text-decoration-none" id="profile">Profile</a>

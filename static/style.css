@@ -31,11 +31,30 @@
     flex-shrink: 0;
 }
 
+.offcanvas-header {
+    display: grid;
+}
+
+.offcanvas-title {
+    display: block;
+    text-align: center;
+    align-items: center;
+    width: 100%;
+    font-family: "SUSE Mono", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    color: var(--cream);
+    padding: 0;
+    text-decoration: none;        
+    font-size: 1.8rem;
+}
+
 .suse-mono-title {
     font-family: "SUSE Mono", sans-serif;
     font-optical-sizing: auto;
     font-weight: 800;
-    font-size: 35px;
+    font-size: 38px;
     font-style: normal;
     color: var(--cafe-noir);
     text-align: center;
@@ -118,10 +137,11 @@
 .card-body {
     padding: 0.5rem 0;
     background-color: var(--mint-green);
+    border-radius: 5px;
 }
 
 .card-body:hover, .card-body:active{
-    background-color: #f8c9f8;
+    background-color: #e9bfe9;
 }
 
 .card-body .row {
@@ -249,7 +269,7 @@
 }
 
 #deleteToast #undoDelete {
-    color: var(--timber); /* Bootstrap primary */
+    color: var(--timber); 
     font-weight: 500;
     font-size: 0.9rem;
     background: transparent;
@@ -271,7 +291,7 @@
 }
 
 .card-body.checked {
-  background-color: #858c91; /* highlight color */
+  background-color: #858c91; 
 }
 
 .sort{

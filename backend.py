@@ -89,7 +89,8 @@ def login():
             return redirect(url_for("user"))
         return render_template("login.html")
  
-@app.route("/user", methods=["POST","GET"])
+# user route will now be for sign up page!!
+@app.route("/signup", methods=["POST","GET"])
 def user():
     email = None
     if "user" in session:
@@ -106,7 +107,7 @@ def user():
             if "email" in session:
                 email = session["email"]        
         
-        return render_template("user.html", email=email)
+        return render_template("signup.html", email=email)
     else:
         flash("You are not logged in!", "danger")
         return redirect(url_for("login"))

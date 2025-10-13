@@ -1,37 +1,38 @@
-{% extends "auth_base.html" %}
-{% block title %} Login Page {% endblock %}
+{% extends "auth_base.html"%}
+{% block title %} Sign Up {% endblock %}
 
 {% block content %}
-    {% with messages = get_flashed_messages() %}
+{% with messages = get_flashed_messages() %}
         {% if messages %}
             <ul class="flashes">
             {% for message in messages %}
                 <li>{{ message }}</li>
-            {% endfor %}
+            {% endfor %}    
             </ul>
         {% endif %}
-    {% endwith%}
+    {% endwith%}    
 
     <div class="main-container">
         <div class="logo-container">
-          <img src="{{ url_for('static', filename='images/WebApp LOGO.png') }}"alt="Logo" class="logo img-fluid d-block mx-auto rounded-circle">
-          <h3 class="offcanvas-title" id="offcanvasLabel">LeafList</h3>
+            <img src="{{ url_for('static', filename='images/WebApp LOGO.png') }}"alt="Logo" class="logo img-fluid d-block mx-auto rounded-circle">
+            <h3 class="offcanvas-title" id="offcanvasLabel">LeafList</h3>
         </div>
 
         <div class="image-container">
             <img src="{{ url_for('static', filename='images/leaves.png') }}" alt="">
         </div>
 
-        <div class="login">
+        <div class="sign-up">
             <form method="POST" action="#">
-                <h2>Welcome back!</h2>
+                <h2>Create an account</h2>
                 <p class="login-text">
-                    Let's get you signed in
+                    Already have an account?
+                    <a href="{{ url_for('login') }}">Log in</a>
                 </p>
                 
                 <div class="mb-3">
                     <!-- <label for="InputFullName" class="form-label">Full name</label> -->
-                    <input type="text" class="form-control" id="inputName" placeholder="Full name" aria-describedby="emailHelp">
+                    <input type="email" class="form-control" id="inputName" placeholder="Full name">
                 </div>
                 <div class="mb-3">
                     <!-- <label for="InputEmail" class="form-label">Email address</label> -->
@@ -40,19 +41,16 @@
                 <div class="mb-3">
                     <!-- <label for="InputPassword" class="form-label">Password</label> -->
                     <input type="password" class="form-control" id="inputPassword" placeholder="Enter your password">
-                    <p class="forgot-password">
-                      <a href="{{ url_for('login') }}">Forgot password?</a>
-                    </p>
+                </div>
+
+                <div class="mb-3">
+                    <!-- <label for="InputPassword" class="form-label">Password</label> -->
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Re-enter your password">
                 </div>
                 
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-primary">Create account</button>
             </form>
         </div>
     </div>
 
-  <!-- <form method="POST" action="#">
-    <p>Name: </p>
-    <p><input type="text" id="nm" name="nm"></p>
-    <p><input type="submit" value="Login"></p>
-  </form> -->
 {% endblock %}

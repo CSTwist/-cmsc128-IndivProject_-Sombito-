@@ -271,6 +271,12 @@ body, html {
     color: var(--cafe-noir);
 }
 
+.edit-password-btn {
+    background-color: var(--coral-pink);
+    border: var(--coral-pink);
+    color: var(--cafe-noir);
+}
+
 /* OFFCANVAS FOOTER */
 
 .company-footer {

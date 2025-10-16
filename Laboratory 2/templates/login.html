@@ -2,16 +2,6 @@
 {% block title %} Login Page {% endblock %}
 
 {% block content %}
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class="flashes">
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-
 <div class="main-container">
   <!-- Logo -->
   <div class="logo-container">
@@ -25,7 +15,7 @@
 
   <!-- Left side image -->
   <div class="image-container">
-    <img src="{{ url_for('static', filename='images/leaves.png') }}" alt="">
+    <img  src="{{ url_for('static', filename='images/leaves.png') }}" alt="">
   </div>
 
   <!-- Login section -->
@@ -40,7 +30,7 @@
           class="form-control" 
           id="nm" 
           name="nm" 
-          placeholder="Full name" 
+          placeholder="User Name" 
           required
         >
       </div>
@@ -64,16 +54,45 @@
           placeholder="Enter your password"
         >
         <p class="forgot-password">
-          <a href="{{ url_for('login') }}">Forgot password?</a>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#passwordRecoveryModal">Forgot password?</a>
         </p>
       </div>
 
       <button type="submit" class="btn btn-primary w-100">Login</button>
+
+      {% if message %}
+        <p class="text-danger text-center mt-2">{{ message }}</p>
+      {% endif %}
 
       <p class="mt-3 text-center">
         Don't have an account?
         <a href="{{ url_for('signup') }}">Sign up</a>
       </p>
     </form>
-    
+  </div>
+</div>
+
+<!-- Password Recovery Modal -->
+<div class="modal fade" id="passwordRecoveryModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title w-100">Password Recovery</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Enter your registered email to reset your password:</p>
+        <form id="recoveryForm">
+          <div class="mb-3">
+            <input type="email" class="form-control" id="recoveryEmail" placeholder="Enter your email" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Send Recovery Password</button>
+        </form>
+        <p id="recoveryMessage" class="text-center mt-2"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/password_recovery.js') }}"></script>
 {% endblock %}

@@ -117,7 +117,6 @@ body, html {
     display: flex;
     height: 100vh;
     width: 100vw;
-    position: relative;
 }
 
 .logo-container {
@@ -147,18 +146,41 @@ body, html {
 
 /* left side = image */
 .image-container {
-    max-width: 80%;
-    height: 100vh;
-    /* display: flex;
-    justify-content: flex-start;
-    align-items: center; */
+    height: 100%;
     flex: 1;
     overflow: hidden;
-    /* position:relative; */
 }
 
 .login{
-    padding: 30px 30px 30px 30px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--cream);
+    padding: 2rem;
+}
+
+.login form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 60%;
+    max-width: 500px;
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login h2 {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.login p.login-text {
+    color: var(--gray);
+    margin-bottom: 1.5rem;
 }
 
 .image-container img {
@@ -173,7 +195,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
+    background-color: var(--cream);
     height: 100vh;
 }
 
@@ -182,8 +204,11 @@ body, html {
     flex-direction: column;
     gap: 0.25rem;
     width: 60%;
+    max-width: 500px;
     background: var(--cream);
-    padding: 2rem
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .sign-up input[type="name"],

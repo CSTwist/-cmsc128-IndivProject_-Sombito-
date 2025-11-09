@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %} Login Page {% endblock %}
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+            <div id="flashToast" class="user-login-message toast align-items-center toast-cream border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+              <div class="flashes toast-body">
+                  {% for message in messages %}
+                    {{ message }}
+                  {% endfor %}
+              </div>
+              <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+          </div>
+        {% endif %}
+    {% endwith%}
+    
+  <form method="POST" action="#">
+    <p>Name: </p>
+    <p><input type="text" id="nm" name="nm"></p>
+    <p><input type="submit" value="Login"></p>
+  </form>
+{% endblock %}

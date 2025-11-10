@@ -1,8 +1,12 @@
-
-from flask import Flask, jsonify, redirect, url_for, render_template, request, session, flash
+from flask import Flask, jsonify, redirect, url_for, render_template, request, session
 from datetime import timedelta, datetime, UTC
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
+from werkzeug.security import generate_password_hash, check_password_hash
+import random
+import string
 
+# -------------------- FLASK SETUP --------------------
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo_app.sqlite3'
@@ -11,24 +15,28 @@ app.permanent_session_lifetime = timedelta(days=5)
 
 db = SQLAlchemy(app)
 
-class users(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=True)
+# -------------------- FLASK MAIL SETUP --------------------
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'cnsombito@up.edu.ph'      # Your Gmail
+app.config['MAIL_PASSWORD'] = 'qnun jaik iuvo qrsf'         # Gmail App Password
+app.config['MAIL_DEFAULT_SENDER'] = ('LeafList', 'cnsombito@up.edu.ph')
 
-    def __init__(self, name, email):
-        self.name = name
-        self.email = email
+mail = Mail(app)
 
+# -------------------- DATABASE MODEL --------------------
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     deadline = db.Column(db.String(20), nullable=False)   # deadline date
     time = db.Column(db.String(10), nullable=False)       # deadline time
     created_at = db.Column(db.String(10), nullable=False) # time task was created
     priority = db.Column(db.String(10), nullable=False)   # task priority
 
-    def __init__(self, name, deadline, time, created_at, priority):
+    def __init__(self, owner_id, name, deadline, time, created_at, priority):
+        self.owner_id = owner_id
         self.name = name
         self.deadline = deadline
         self.time = time
@@ -37,6 +45,7 @@ class Task(db.Model):
     
     def to_dict(self):
         return {
+            "owner_id": self.owner_id,
             "id": self.id,
             "name": self.name,
             "deadline": self.deadline,
@@ -44,78 +53,180 @@ class Task(db.Model):
             "created_at": self.created_at,
             "priority": self.priority
         }
+        
+class Accounts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nameOfUser = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=True)
+    password = db.Column(db.String(200), nullable=True)
 
+    def __init__(self, nameOfUser, username, email, password):
+        self.nameOfUser = nameOfUser
+        self.username = username
+        self.email = email
+        self.password = password
+
+# -------------------- ROUTES --------------------
 @app.route("/")
 def home():
     if "user" in session:     
         return render_template("index.html")
     else:
-        flash("You are not logged in!", "danger")
         return redirect(url_for("login"))
-
-@app.route("/view")
-def view():
-    return render_template("view.html", values=users.query.all())
 
 @app.route("/profile")
 def profile():
-    if "user" in session:     
-        return render_template("profile.html", user=session["user"])
-    else:
-        flash("You are not logged in!", "danger")
+    if "user" not in session:
         return redirect(url_for("login"))
+    return render_template(
+        "profile.html",
+        user=session.get("user"),
+        email=session.get("email"),
+        username=session.get("username")
+    )
+    
+# -------------------- EDIT ACCOUNT --------------------
+@app.route("/edit_account/<int:account_id>", methods=["PUT"])
+def edit_account(account_id):
+    data = request.get_json() or {}
+    account = Accounts.query.get(account_id)
 
+    if not account:
+        return jsonify({"success": False, "message": "Account not found."}), 404
+
+    # Update account fields
+    name = data.get("nameOfUser", "").strip()
+    username = data.get("username", "").strip()
+    email = data.get("email", "").strip()
+    password = data.get("password", "").strip()
+
+    if not all([name, username, email]):
+        return jsonify({"success": False, "message": "Name, username, and email cannot be empty."}), 400
+
+    account.nameOfUser = name
+    account.username = username
+    account.email = email
+
+    session["user"] = name
+    session["email"] = email
+    session["username"] = username
+            
+    if password:
+        account.password = generate_password_hash(password)
+
+    db.session.commit()
+    return jsonify({"success": True, "message": "Account updated successfully."})
+
+# -------------------- LOGIN --------------------
 @app.route("/login", methods=["POST", "GET"])
 def login():
+    message = ""
     if request.method == "POST":
         session.permanent = True
-        user = request.form["nm"]
-        session["user"] = user
-        
-        found_user = users.query.filter_by(name=user).first()
-        if found_user:
+        name = request.form.get("nm", "").strip()
+        email = request.form.get("email", "").strip()
+        password = request.form.get("password", "").strip()
+
+        if not name or not password:
+            message = "Please fill in your name and password."
+            return render_template("login.html", message=message)
+
+        # Find user by email or username
+        found_user = None
+        if email:
+            found_user = Accounts.query.filter_by(email=email).first()
+        if name:
+            found_user = Accounts.query.filter_by(username=name).first()
+
+        if found_user and check_password_hash(found_user.password, password):
+            session["user"] = found_user.nameOfUser
             session["email"] = found_user.email
-            
-        else:
-            usr = users(user, "")
-            db.session.add(usr)
-            db.session.commit()
-        
-        flash("Login Successful!", "info")
-        return redirect(url_for("home"))
-    else:
-        if "user" in session:
-            flash("Already Logged In!", "info")
-            return redirect(url_for("user"))
-        return render_template("login.html")
- 
-# user route will now be for sign up page!!
-@app.route("/signup", methods=["POST","GET"])
-def user():
-    email = None
+            session["username"] = found_user.username
+            session["user_id"] = found_user.id
+            return redirect(url_for("profile"))
+
+        message = "Invalid username/email or password."
+        return render_template("login.html", message=message)
+
     if "user" in session:
-        user = session["user"]
-        
-        if request.method == "POST":
-                email = request.form["email"]
-                session["email"] = email
-                found_user = users.query.filter_by(name=user).first()
-                found_user.email = email
-                db.session.commit()
-                flash("Email was saved!", "info")
+        return redirect(url_for("profile"))
+    return render_template("login.html")
+ 
+# -------------------- SIGNUP --------------------
+@app.route("/signup", methods=["POST", "GET"])
+def signup():
+    message = ""
+    if request.method == "POST":
+        if request.is_json:
+            data = request.get_json()
+            nameOfUser = data.get("nameOfUser", "").strip()
+            username = data.get("username", "").strip()
+            email = data.get("email", "").strip()
+            password = data.get("password", "").strip()
         else:
-            if "email" in session:
-                email = session["email"]        
-        
-        return render_template("signup.html", email=email)
-    else:
-        flash("You are not logged in!", "danger")
-        return redirect(url_for("login"))
-    
-@app.route("/add_task", methods=["POST"])
+            nameOfUser = request.form.get("nameOfUser", "").strip()
+            username = request.form.get("username", "").strip()
+            email = request.form.get("email", "").strip()
+            password = request.form.get("password", "").strip()
+
+        if not all([nameOfUser, username, email, password]):
+            msg = "All fields are required to sign up."
+            return jsonify({"success": False, "message": msg}) if request.is_json else render_template("signup.html", message=msg)
+
+        if Accounts.query.filter_by(email=email).first():
+            msg = "Email already registered. Please log in."
+            return jsonify({"success": False, "message": msg}) if request.is_json else render_template("signup.html", message=msg)
+        if Accounts.query.filter_by(username=username).first():
+            msg = "Username already taken. Choose another."
+            return jsonify({"success": False, "message": msg}) if request.is_json else render_template("signup.html", message=msg)
+
+        hashed_password = generate_password_hash(password)
+        new_account = Accounts(nameOfUser, username, email, hashed_password)
+        db.session.add(new_account)
+        db.session.commit()
+
+        msg = "Account created successfully! Please log in."
+        return jsonify({"success": True, "message": msg}) if request.is_json else render_template("login.html", message=msg)
+
+    return render_template("signup.html", message=message)
+
+# -------------------- PASSWORD RECOVERY --------------------
+@app.route("/password_recovery", methods=["POST"])
+def password_recovery():
+    data = request.get_json() or {}
+    email = data.get("email", "").strip()
+
+    if not email:
+        return jsonify({"success": False, "message": "Please enter your email."})
+
+    account = Accounts.query.filter_by(email=email).first()
+    if not account:
+        return jsonify({"success": False, "message": "Email not found or error."})
+
+    temp_password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+    account.password = generate_password_hash(temp_password)
+    db.session.commit()
+
+    try:
+        msg = Message(
+            subject="LeafList Password Recovery",
+            recipients=[email],
+            body=f"Hello {account.nameOfUser},\n\nYour temporary password is: {temp_password}\nPlease log in and change it immediately."
+        )
+        mail.send(msg)
+        return jsonify({"success": True, "message": "Temporary password sent to your email."})
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"success": False, "message": "Failed to send email."})
+
+# -------------------- TASK ACTIONS --------------------    
+@app.route("/add_task", methods=["POST"]) #ADD TASKS
 def add_task():
     if request.is_json:
         data = request.get_json()
+        current_user = data.get("currentUser")
         task_name = data.get("taskName")
         deadline = data.get("deadline")
         time = data.get("time")
@@ -125,22 +236,20 @@ def add_task():
         if not priority:
             return jsonify({"success": False, "message": "Priority is required"}), 400
 
-        new_task = Task(name=task_name, deadline=deadline, time=time, created_at=created_at, priority=priority)
+        new_task = Task(owner_id=current_user, name=task_name, deadline=deadline, time=time, created_at=created_at, priority=priority)
         db.session.add(new_task)
         db.session.commit()
 
         return redirect(url_for("home"))
-        # return jsonify({"success": True, "message": "Task added"})
     else:
         return jsonify({"error": "Unsupported Media Type"}), 415
 
-
-@app.route("/tasks", methods=["GET"])
+@app.route("/tasks", methods=["GET"]) #GET TASKS
 def get_tasks():
-    tasks = Task.query.all()
+    tasks = Task.query.filter_by(owner_id=session["user_id"]).all()
     return jsonify([task.to_dict() for task in tasks])
 
-@app.route("/delete_task/<int:task_id>", methods=["DELETE"])
+@app.route("/delete_task/<int:task_id>", methods=["DELETE"]) #DELETE TASKS
 def delete_task(task_id):
     task = Task.query.get(task_id)
     if task:
@@ -149,7 +258,7 @@ def delete_task(task_id):
         return jsonify({"success": True, "message": "Task deleted"})
     return jsonify({"success": False, "message": "Task not found"}), 404
 
-@app.route("/edit_task/<int:task_id>", methods=["PUT"])
+@app.route("/edit_task/<int:task_id>", methods=["PUT"]) #EDIT TASKS
 def edit_task(task_id):
     task = Task.query.get(task_id)
     if not task:
@@ -166,12 +275,10 @@ def edit_task(task_id):
     db.session.commit()
     return jsonify({"success": True, "message": "Task updated"})
 
+# -------------------- LOGOUT --------------------
 @app.route("/logout")
 def logout():
-    
-    flash(f"You have been logged out!", "info")
-    session.pop("user", None)
-    session.pop("email", None)
+    session.clear()
     return redirect(url_for("login"))
 
 if __name__ == "__main__":

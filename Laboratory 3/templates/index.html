@@ -21,7 +21,7 @@
     <h1 class="suse-mono-title">LeafList</h1>
 
     <div class="dashboard-message">
-        <h3>Welcome {{ session['user'] }}!</h3>
+        <h3>Welcome {{ session['username'] }}!</h3>
         <p>This is your user dashboard.</p>
     </div>
 
@@ -75,6 +75,7 @@
               <div class="mb-3">
                 <label for="taskName" class="form-label">Task Name</label>
                 <input type="text" class="form-control" id="taskName" name="taskName" required>
+                <input type="hidden" id="currentUser" name="time">
               </div>
               <div class="mb-3">
                 <label for="deadline" class="form-label">Deadline</label>
@@ -83,7 +84,6 @@
               <div class="mb-3">
                 <label for="time" class="form-label">Time</label>
                 <input type="time" class="form-control" id="time" name="time" required>
-                <input type="hidden" id="currentTime" name="time">
               </div>
               <div class="mb-3">
                 <label class="form-label">Priority</label>
@@ -200,7 +200,9 @@
       </div>
     </div>
     
-
+    <script>
+      const currentUser = "{{ session['user_id'] }}";
+    </script>
     <script src="{{ url_for('static', filename='js/load_tasks.js') }}"></script>
     <script src="{{ url_for('static', filename='js/add_task.js') }}"></script>
     <script src="{{ url_for('static', filename='js/edit_tasks.js') }}"></script>

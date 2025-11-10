@@ -1,4 +1,3 @@
-
 from flask import Flask, jsonify, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta, datetime, UTC
 from flask_sqlalchemy import SQLAlchemy

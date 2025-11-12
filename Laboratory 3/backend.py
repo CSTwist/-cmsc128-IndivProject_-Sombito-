@@ -75,6 +75,25 @@ def home():
     else:
         return redirect(url_for("login"))
 
+# =====DRAFT BACKEND FOR TO DO LIST SPACES =====    
+@app.route("/dashboard/<space_name>")
+def dashboard_space(space_name):
+    if "user" not in session:
+        return redirect(url_for("login"))
+    
+    space_titles = {
+        "personal": "Personal To Do List",
+        "shared": "Shared To Do List"
+    }
+
+    title = space_titles.get(space_name, "To Do List")      # default title
+
+    return render_template(
+        "dashboard_space.html",
+        user = session.get("user"),
+        space_title = title
+    )
+
 @app.route("/profile")
 def profile():
     if "user" not in session:

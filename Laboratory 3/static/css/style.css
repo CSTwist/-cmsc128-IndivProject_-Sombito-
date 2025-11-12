@@ -75,15 +75,23 @@ html, body {
     background-color: var(--cream);
 }
 
-.offcanvas.custom h5, .offcanvas.custom a,
-.offcanvas.custom a:link, .offcanvas.custom a:visited
- {
+.offcanvas.custom h5,
+.offcanvas.custom a:link, .offcanvas.custom a:visited {
     display: block;
     width: 100%;
     padding: 0.5rem 0.5rem;
     color: var(--cream) !important;    
     text-decoration: none;        
     font-size: 1.3rem;
+}
+.dropdown-item-text {
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: var(--cafe-noir);
+    font-weight: 500;
 }
 
 .offcanvas.custom .offcanvas-body a:hover {
@@ -92,7 +100,205 @@ html, body {
     text-decoration: none;
 }
 
-.offcanvas.custom button {   
+/* ========= SWITCHER IN BASE.HTML ========= */
+
+.switcher-name {
+    flex: 1;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.switcher-name .dropdown-item {
+    padding: 0;
+}
+
+.switcher-dropdown {
+    padding-top: 0.3rem;
+}
+
+.switcherContainer {
+    width: 16rem;
+    height: 3.8125rem;
+    padding: 0.5rem 1.1rem;
+}
+
+.switcher {
+    border-radius: 0.3125rem;
+    border: 1px solid #FDFBD4;
+    background: #FDFBD4;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.switcher-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.3rem 0.75rem;
+}
+
+.switcher-header .bi-plus-square {
+    font-size: 1.2rem;
+    -webkit-text-stroke: 0.5px var(--cafe-noir);
+    color: var(--cafe-noir);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.switcher-header .bi-plus-square:hover {
+    color: var(--timber); 
+}
+
+.switcher-header .bi-plus-square:active {
+    color: var(--coral-pink); 
+}
+
+.switcher-header span {
+    color: #6d6c6c;
+    font-weight: 500;
+}
+
+.switcherBtn {
+    display: flex;
+    justify-content: space-between;
+    width: 13.2rem;
+    max-width: 16rem;
+    white-space: normal;
+    word-wrap: break-word;
+    height: auto;
+    line-height: 1.3;
+    padding: 0.1rem 0.5rem;
+    color: var(--timber) !important;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.switcherBtn:hover {
+    background-color: #edeccc;
+    border-radius: 5px;
+}
+
+.leaf {
+    margin: 16px 5px 16px auto;
+    display: inline;
+    justify-content: space-between;
+    align-items:flex-start;
+    text-align: left;
+}
+
+.switcher-dropdown.show {
+  display: block;
+}
+
+.switchContainer {
+    gap: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.switcher-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1050;
+    display:none;
+    color: var(--cafe-noir) !important;
+    width: 18rem;
+    padding: 0.5rem 0;
+    border-radius: 0.4375rem;
+    border: 1px solid #A7A7A7;
+    background: #FDFBD4;
+}
+
+.switcher-dropdown li {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+}
+
+.switcher-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    position: relative;
+}
+
+.check-icon {
+    color: var(--timber);
+    font-size: 1.2rem;
+    visibility: hidden;
+}
+
+.switcher-item.active .check-icon {
+  visibility: visible;
+}
+
+.switcher-item.active {
+  background-color: #e7e7ba; 
+  border-radius: 6px;
+}
+
+li.switcher-item:hover {
+    background-color: #e7e7ba;
+}
+
+.switcher-dropdown li:hover {
+    font-size: 1rem;
+    color: var(--cafe-noir);
+    text-decoration: none;
+}
+
+.switcher-type {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-left: 1.5rem; 
+    margin-top: -0.2rem;
+}
+
+.switcherContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-decoration: none;
+    color: var(--cafe-noir);
+}
+
+.name-type {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.switcher-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.switcher-type {
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-left: 1.5rem; 
+  margin-top: 0.2rem;
+}
+
+.offcanvas-body button {   
     display: block;
     width: 100%;
     padding: 0.5rem 0.5rem;
@@ -130,7 +336,7 @@ html, body {
 }
 
 .task-scroll {
-    height: calc(100vh - 260px); /* adjust if needed based on your top content */
+    height: calc(100vh - 260px);
     overflow-y: auto;
     padding-right: 6px;
 }
@@ -352,14 +558,57 @@ html, body {
   background-color: #858c91; 
 }
 
-.sort{
+.sort {
     display: flex;
     justify-content: left;
     align-items: center;
     margin: 1rem 0;
+    gap: 0.75rem;
 }
 
 .dropdown.mb-3{
     margin-bottom: 0 !important;
     margin-right: 1rem;
 }
+
+.vertical-line {
+    width: 0.09rem;
+    height: 2.2rem;
+    background: #6C757D;
+}
+
+/* ========= INVITE MEMBER BUTTON IN INDEX.HTML ========= */
+
+.shareBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+#inviteModal .modal-footer {
+    display: flex;
+    justify-content: flex-start; 
+    gap: 0.5rem; 
+}
+
+#inviteModal .modal-body {
+    color: var(--cafe-noir); 
+}
+
+#inviteModal .modal-body label,
+#inviteModal .modal-body .form-label {
+    color: var(--cafe-noir);
+}
+
+#inviteModal .modal-body .form-label {
+    font-size: 18px;
+}
+
+#inviteModal .modal-body .form-control {
+    color: var(--cafe-noir); 
+}
+
+#inviteModal .modal-body .form-control::placeholder {
+    color: var(--gray);
+}
+

@@ -7,7 +7,7 @@ async function deleteTasks(taskId) {
 
     const tasks = await response.json();
     lastDeletedTask = tasks.find(task => task.id == taskId);
-
+    
     const deleteResponse = await fetch(`/delete_task/${taskId}`, { method: "DELETE"});
     const deleteResult = await deleteResponse.json();
 
@@ -72,42 +72,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!lastDeletedTask) return;
 
-            await fetch("/add_task", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    taskName: lastDeletedTask.name,
-                    deadline: lastDeletedTask.deadline,
-                    time: lastDeletedTask.time,
-                    created_at: lastDeletedTask.created_at,
-                    priority: lastDeletedTask.priority
-                })
-            });
+            try {
+                const response = await fetch("/add_task", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        currentUser,
+                        taskName: lastDeletedTask.name,
+                        deadline: lastDeletedTask.deadline,
+                        time: lastDeletedTask.time,
+                        created_at: lastDeletedTask.created_at,
+                        priority: lastDeletedTask.priority
+                    })
+                });
+            
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText || "Server returned an error");
+                }
 
-            if (typeof loadTasks === "function") {
-                loadTasks();
+                if (typeof loadTasks === "function") {
+                    loadTasks();
+                }
+
+                const toastElementId = document.getElementById("deleteToast");
+                const toast = bootstrap.Toast.getInstance(toastElementId);
+                if (toast) toast.hide();
+
+                lastDeletedTask = null;
+            } catch {
+                console.error("Undo failed", err);
+                alert("Undo failed. Please try again later.");
             }
-
-            const toastElementId = document.getElementById("deleteToast");
-            const toast = bootstrap.Toast.getInstance(toastElementId);
-            if (toast) toast.hide();
-
-            lastDeletedTask = null;
         });
     }
-});
+},)
 
-// Attach delete handlers -- needs to fix;
+// Attach delete handlers
 function attachDeleteHandlers(params) {
 
     document.querySelectorAll(".delete-task").forEach(button => {
         button.addEventListener("click", e =>{
             const taskId = e.currentTarget.getAttribute("data-id");
-            // if (!confirm("Are you sure you want to delete this task?")) return;
-            // deleteTasks(taskId);
             pendingDeleteTaskId = taskId;
             showWarningToast();
         });
     });
-
 }

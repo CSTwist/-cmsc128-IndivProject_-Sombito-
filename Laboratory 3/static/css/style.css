@@ -80,7 +80,7 @@ html, body {
     display: block;
     width: 100%;
     padding: 0.5rem 0.5rem;
-    color: var(--cream) !important;    
+    color: var(--cream);    
     text-decoration: none;        
     font-size: 1.3rem;
 }
@@ -106,6 +106,7 @@ a {
     flex: 1;
     white-space: normal;
     word-break: break-word;
+    color: var(--timber) !important;
 }
 
 .switcher-name .dropdown-item {
@@ -117,9 +118,9 @@ a {
 }
 
 .switcherContainer {
-    width: 16rem;
+    width: auto;
     height: 3.8125rem;
-    padding: 0.5rem 1.1rem;
+    margin: 0px 0px 0px 0px;
 }
 
 .switcher {
@@ -200,6 +201,9 @@ a {
 
 .switcher-dropdown.show {
   display: block;
+}
+.dropdown-menu.prevent-close {
+  pointer-events: none;
 }
 
 .switchContainer {
@@ -386,8 +390,14 @@ li.switcher-item:hover {
 .deadline {
     margin-left: 4.5rem;
 }
+
 .actions {
     margin-left: 2rem;
+}
+
+.delete-list {
+    font-size: 0.9rem;
+    padding: 0.25rem 0.5rem;
 }
 
 .task-name {
@@ -468,7 +478,7 @@ li.switcher-item:hover {
     z-index: 1100;
 }
 
-#deleteToastWarning.toast {
+#deleteToastWarningTask.toast, #deleteToastWarningList.toast {
     background-color: var(--coral-pink);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -480,7 +490,7 @@ li.switcher-item:hover {
     border: 1px solid rgba(0,0,0,0.2);
 }
 
-#deleteToastWarning .toast-header {
+#deleteToastWarningTask .toast-header, #deleteToastWarningList .toast-header {
     background-color: var(--coral-pink);
     color: #212529;
     font-weight: 500;
@@ -489,7 +499,7 @@ li.switcher-item:hover {
     border-radius: 12px 12px 0 0;
 }
 
-#deleteToastWarning button {
+#deleteToastWarningTask button, #deleteToastWarningList button {
     border: none;
     font-weight: 600;
     font-size: 0.9rem;
@@ -498,13 +508,13 @@ li.switcher-item:hover {
     cursor: pointer;
 }
 
-#deleteToastWarning .toast-body {
+#deleteToastWarningTask .toast-body, #deleteToastWarningList .toast-body {
     padding: 1rem;
     color: #fff; 
     font-size: 1rem;
 }
 
-#deleteToast.toast {
+#deleteToastTask.toast, #deleteToastList.toast {
     background-color: var(--cream);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -516,7 +526,7 @@ li.switcher-item:hover {
     border: 1px solid rgba(0,0,0,0.2);
 }
 
-#deleteToast .toast-header {
+#deleteToastTask .toast-header, #deleteToastList .toast-header {
     background-color: #ffffff;
     color: #212529;
     font-weight: 500;
@@ -525,14 +535,14 @@ li.switcher-item:hover {
     padding: 0.75rem 1rem;
 }
 
-#deleteToast .toast-body {
+#deleteToastTask .toast-body, #deleteToastList .toast-body {
     padding: 1rem;
     color: #212529;
     background-color: #ffffff;
     font-size: 1rem;
 }
 
-#deleteToast #undoDelete {
+#deleteToastTask #undoDeleteTask, #deleteToastList #undoDeleteList {
     color: var(--timber); 
     font-weight: 500;
     font-size: 0.9rem;
@@ -543,7 +553,7 @@ li.switcher-item:hover {
     transition: color 0.2s ease;
 }
 
-#deleteToast #undoDelete:hover {
+#deleteToastTask #undoDelete:hover, #deleteToastList #undoDeleteList:hover {
     color: #0a58ca;
 }
 
@@ -564,25 +574,33 @@ li.switcher-item:hover {
     align-items: center;
     margin: 1rem 0;
     gap: 0.75rem;
+    padding-right: 1rem;
+}
+
+.sort > :nth-last-child(2) {
+    margin-left: auto;
 }
 
 .dropdown.mb-3{
     margin-bottom: 0 !important;
-    margin-right: 1rem;
 }
 
 .vertical-line {
     width: 0.09rem;
     height: 2.2rem;
     background: #6C757D;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
 /* ========= INVITE MEMBER BUTTON IN INDEX.HTML ========= */
 
-.shareBtn {
+.shareBtn{
     display: flex;
     align-items: center;
     gap: 0.3rem;
+    color: green;
+    border-width: 2px;
 }
 
 #inviteModal .modal-footer {

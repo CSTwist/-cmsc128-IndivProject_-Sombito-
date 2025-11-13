@@ -26,17 +26,29 @@ app.config['MAIL_DEFAULT_SENDER'] = ('LeafList', 'cnsombito@up.edu.ph')
 mail = Mail(app)
 
 # -------------------- DATABASE MODEL --------------------
-class Task(db.Model):
+class List(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    type = db.Column(db.String(50), nullable=False)  # e.g., personal, shared
+    tasks = db.relationship('Task', backref='list', cascade="all, delete-orphan")
+
+    def __init__(self, owner_id, name, type):
+        self.owner_id = owner_id
+        self.name = name
+        self.type = type
+        
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    list_id = db.Column(db.Integer, db.ForeignKey('list.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     deadline = db.Column(db.String(20), nullable=False)   # deadline date
     time = db.Column(db.String(10), nullable=False)       # deadline time
     created_at = db.Column(db.String(10), nullable=False) # time task was created
     priority = db.Column(db.String(10), nullable=False)   # task priority
 
-    def __init__(self, owner_id, name, deadline, time, created_at, priority):
-        self.owner_id = owner_id
+    def __init__(self, list_id, name, deadline, time, created_at, priority):
+        self.list_id = list_id
         self.name = name
         self.deadline = deadline
         self.time = time
@@ -45,7 +57,7 @@ class Task(db.Model):
     
     def to_dict(self):
         return {
-            "owner_id": self.owner_id,
+            "list_id": self.list_id,
             "id": self.id,
             "name": self.name,
             "deadline": self.deadline,
@@ -68,31 +80,17 @@ class Accounts(db.Model):
         self.password = password
 
 # -------------------- ROUTES --------------------
+@app.route("/debug/session")
+def debug_session():
+    from flask import jsonify, session
+    return jsonify({k: v for k, v in session.items()})
+
 @app.route("/")
 def home():
     if "user" in session:     
         return render_template("index.html")
     else:
         return redirect(url_for("login"))
-
-# =====DRAFT BACKEND FOR TO DO LIST SPACES =====    
-@app.route("/dashboard/<space_name>")
-def dashboard_space(space_name):
-    if "user" not in session:
-        return redirect(url_for("login"))
-    
-    space_titles = {
-        "personal": "Personal To Do List",
-        "shared": "Shared To Do List"
-    }
-
-    title = space_titles.get(space_name, "To Do List")      # default title
-
-    return render_template(
-        "dashboard_space.html",
-        user = session.get("user"),
-        space_title = title
-    )
 
 @app.route("/profile")
 def profile():
@@ -163,6 +161,8 @@ def login():
             session["email"] = found_user.email
             session["username"] = found_user.username
             session["user_id"] = found_user.id
+            session["list_id"] = List.query.filter_by(owner_id=found_user.id).first().id if List.query.filter_by(owner_id=found_user.id).first() else None
+            session["list_name"] = List.query.filter_by(owner_id=found_user.id).first().name if List.query.filter_by(owner_id=found_user.id).first() else None
             return redirect(url_for("profile"))
 
         message = "Invalid username/email or password."
@@ -245,7 +245,7 @@ def password_recovery():
 def add_task():
     if request.is_json:
         data = request.get_json()
-        current_user = data.get("currentUser")
+        current_List = session["list_id"]
         task_name = data.get("taskName")
         deadline = data.get("deadline")
         time = data.get("time")
@@ -255,7 +255,7 @@ def add_task():
         if not priority:
             return jsonify({"success": False, "message": "Priority is required"}), 400
 
-        new_task = Task(owner_id=current_user, name=task_name, deadline=deadline, time=time, created_at=created_at, priority=priority)
+        new_task = Task(list_id=current_List, name=task_name, deadline=deadline, time=time, created_at=created_at, priority=priority)
         db.session.add(new_task)
         db.session.commit()
 
@@ -265,7 +265,7 @@ def add_task():
 
 @app.route("/tasks", methods=["GET"]) #GET TASKS
 def get_tasks():
-    tasks = Task.query.filter_by(owner_id=session["user_id"]).all()
+    tasks = Task.query.filter_by(list_id=session["list_id"]).all()
     return jsonify([task.to_dict() for task in tasks])
 
 @app.route("/delete_task/<int:task_id>", methods=["DELETE"]) #DELETE TASKS
@@ -299,6 +299,73 @@ def edit_task(task_id):
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
+# -------------------- LIST ACTIONS --------------------
+@app.route("/add_list", methods=["POST"])
+def add_list():
+    if "user_id" not in session:
+        return jsonify({"success": False, "message": "User not logged in"}), 401
+
+    data = request.get_json() or {}
+    name = data.get("name")
+    type_ = data.get("type", "personal")
+
+    if not name:
+        return jsonify({"success": False, "message": "List name is required"}), 400
+
+    owner_id = session["user_id"]
+    new_list = List(owner_id=owner_id, name=name, type=type_)
+    db.session.add(new_list)
+    db.session.commit()
+    session["list_id"] = new_list.id
+    session["list_name"] = new_list.name
+
+    return jsonify({"success": True, "message": "List added successfully", "id": new_list.id})
+
+@app.route("/delete_list/<int:list_id>", methods=["DELETE"])
+def delete_list(list_id):
+    list_item = List.query.get(list_id)
+    if list_item:
+        db.session.delete(list_item)
+        db.session.commit()
+        
+        first_list = List.query.filter_by(owner_id=session['user_id']).order_by(List.id).first()
+    
+        if first_list:
+            session['list_id'] = first_list.id
+            session['list_name'] = first_list.name
+            new_list_data = {"id": first_list.id, "name": first_list.name}
+        else:
+            session['list_id'] = None
+            session['list_name'] = None
+            new_list_data = None
+
+        return jsonify({"success": True, "new_list": new_list_data})
+    return jsonify({"success": False, "message": "List not found"}), 404
+
+@app.route("/lists", methods=["GET"]) #Get Lists of user
+def get_lists():
+    if "user_id" not in session:
+        return jsonify([])
+
+    user_id = session["user_id"]
+    user_lists = List.query.filter_by(owner_id=user_id).all()
+    return jsonify([{"id": l.id, "name": l.name, "type": l.type} for l in user_lists])
+
+@app.route("/set_current_list", methods=["POST"])
+def set_current_list():
+    data = request.get_json()
+    list_id = data.get("list_id")
+    list_name = data.get("list_name")
+
+    if not list_id or not list_name:
+        return jsonify({"success": False, "message": "Missing list information"}), 400
+
+    session["list_id"] = list_id
+    session["list_name"] = list_name
+
+    return jsonify({"success": True})
+
 
 if __name__ == "__main__":
     with app.app_context():

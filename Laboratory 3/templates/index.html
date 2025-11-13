@@ -26,6 +26,42 @@
     </div>
 
     <div class="sort">
+      <!-- SWITCHER FOR SHARED AND PERSONAL TO DO LIST -->
+            <div class="switcherContainer">
+                <div class="switcher">
+                    <button class="switcherBtn btn btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="true">
+                        <div class="leaf">
+                            <i class="bi bi-leaf-fill"></i>
+                        </div> 
+                        <span class="switcher-name">{{ session['list_name'] if 'list_name' in session else 'List Name' }}</span>
+                    </button>
+                    <ul class="switcher-dropdown dropdown-menu">
+                        <div class="switcher-header">
+                            <span>To Do List Spaces</span>
+                            <i class="bi bi-plus-square" data-bs-toggle="modal" data-bs-target="#addList"></i>
+                        </div>  
+                        <!-- Lists will be dynamically loaded here by load_lists.js -->
+                        <div id="userListsContainer"></div>
+                    </ul>
+                </div>
+            </div>
+
+      <!-- SHARE BUTTON TO INVITE MEMBERS THRU EMAIL -->
+      <div class="shareBtnContainer">
+        <button type="button" class="shareBtn btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#inviteModal">
+            <i class="bi bi-person-add"></i> 
+            <span>Share List</span>
+        </button>
+      </div>
+
+      <!-- DELETE LIST BUTTON -->
+      <div class="text-center">
+        <button type="button" class="delete-list btn btn-sm btn-outline-danger">
+            <i class="bi bi-trash"></i>
+            <span>Delete List</span>
+        </button>
+      </div>
+
       <div class="dropdown mb-3">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
           Sort by
@@ -37,16 +73,6 @@
         </ul>
       </div>
       <button type="button" class="btn btn-outline-secondary" id="asc-desc-toggle"></button>
-
-      <div class="vertical-line"></div>
-
-      <!-- SHARE BUTTON TO INVITE MEMBERS THRU EMAIL -->
-      <div class="shareBtnContainer">
-        <button type="button" class="shareBtn btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#inviteModal">
-            <i class="bi bi-person-add"></i> 
-            <span>Share</span>
-        </button>
-      </div>
     </div>
 
     <!-- Invite Member Modal -->
@@ -226,8 +252,9 @@
       </div>
     </div>
 
+    <!-- DELETE TASK TOAST -->
   <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
-    <div id="deleteToastWarning" class="toast fade" role="alert" aria-live="assertive" aria-atomic="true">
+    <div id="deleteToastWarningTask" class="toast fade" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="toast-header">
         <strong class="me-auto">Delete Task?</strong>
         <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
@@ -235,15 +262,16 @@
       <div class="toast-body">
         Are you sure you want to delete this task?
         <div class="mt-2 pt-2 border-top d-flex justify-content-end gap-2">
-          <button id="confirmDelete" type="button" class="btn btn-danger btn-sm">Delete</button>
+          <button id="confirmDeleteTask" type="button" class="btn btn-danger btn-sm">Delete</button>
           <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">Cancel</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- DELETE TASK CONFIRMATION TOAST -->
     <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
-      <div id="deleteToast" class="toast fade" role="alert" aria-live="assertive" aria-atomic="true">
+      <div id="deleteToastTask" class="toast fade" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
           <h5 class="me-auto">Task Deleted</h5>
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -251,18 +279,56 @@
         <div class="toast-body">
           Task deleted.
           <div class="mt-2 pt-2 border-top">
-            <button id="undoDelete" type="button" class="btn btn-primary btn-sm btn-link">Undo</button>
+            <button id="undoDeleteTask" type="button" class="btn btn-primary btn-sm btn-link">Undo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <!-- DELETE LIST TOAST -->
+  <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+    <div id="deleteToastWarningList" class="toast fade" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Delete List?</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+      </div>
+      <div class="toast-body">
+        Are you sure you want to delete this list?
+        <div class="mt-2 pt-2 border-top d-flex justify-content-end gap-2">
+          <button id="confirmDeleteList" type="button" class="btn btn-danger btn-sm">Delete</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE LIST CONFIRMATION TOAST -->
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+      <div id="deleteToastList" class="toast fade" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <h5 class="me-auto">List Deleted</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          List deleted.
+          <div class="mt-2 pt-2 border-top">
+            <button id="undoDeleteList" type="button" class="btn btn-primary btn-sm btn-link">Undo</button>
           </div>
         </div>
       </div>
     </div>
     
     <script>
-      const currentUser = "{{ session['user_id'] }}";
+      let currentList = "{{ session['list_id'] }}";
+      window.currentList = currentList;
     </script>
+
+    <script src="{{ url_for('static', filename='js/load_lists.js') }}"></script>
     <script src="{{ url_for('static', filename='js/load_tasks.js') }}"></script>
     <script src="{{ url_for('static', filename='js/add_task.js') }}"></script>
     <script src="{{ url_for('static', filename='js/edit_tasks.js') }}"></script>
     <script src="{{ url_for('static', filename='js/delete_tasks.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/delete_list.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/add_list.js') }}"></script>
 
 {% endblock %}

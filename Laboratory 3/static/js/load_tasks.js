@@ -3,6 +3,17 @@ let currentSort = null;     // remember last selected sort option
 let sortDirection = "asc";  // default ascending
 
 async function loadTasks(sortBy = null) {
+  const selectedListId = currentList;
+    if (!selectedListId) {
+      const container = document.getElementById("taskContainer");
+      container.innerHTML = `
+        <div class="alert alert-secondary text-center">
+            Please choose a list to display
+        </div>
+      `;
+      return;
+    }
+
   // If no new sort option provided, reuse the last one
   if (sortBy) {
     currentSort = sortBy;
@@ -106,8 +117,11 @@ async function loadTasks(sortBy = null) {
     });
   });
 
-  if (typeof attachDeleteHandlers === "function") {
-    attachDeleteHandlers();
+  if (typeof attachTaskDeleteHandlers === "function") {
+    attachTaskDeleteHandlers();
+  }
+  if (typeof attachListDeleteHandlers === "function") {
+    attachListDeleteHandlers();
   }
 }
 

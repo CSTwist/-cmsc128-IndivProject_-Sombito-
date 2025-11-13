@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        currentUser,
+        currentList,
         taskName,
         deadline,
         time: deadlineTime,  // user deadline

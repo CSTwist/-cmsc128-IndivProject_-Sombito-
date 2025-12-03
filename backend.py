@@ -1,3 +1,5 @@
+import os
+from threading import Thread
 from flask import Flask, jsonify, redirect, url_for, render_template, request, session
 from datetime import timedelta, datetime, UTC
 from flask_sqlalchemy import SQLAlchemy
@@ -8,8 +10,29 @@ import string
 
 # -------------------- FLASK SETUP --------------------
 app = Flask(__name__)
-app.secret_key = "your_secret_key"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo_app.sqlite3'
+app.secret_key = os.environ.get("SECRET_KEY", "default_dev_key")
+
+# -------------------- DATABASE CONFIGURATION --------------------
+turso_db_url = os.environ.get("TURSO_DATABASE_URL")
+turso_auth_token = os.environ.get("TURSO_AUTH_TOKEN")
+
+if turso_db_url and turso_auth_token:
+
+    if turso_db_url.startswith("libsql://"):
+        turso_db_url = turso_db_url.replace("libsql://", "sqlite+libsql://")
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"{turso_db_url}?secure=true"
+    
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        "connect_args": {
+            "auth_token": turso_auth_token,
+            "check_same_thread": False 
+        }
+    }
+    
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo_app.sqlite3'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.permanent_session_lifetime = timedelta(days=5)
 
@@ -19,7 +42,7 @@ db = SQLAlchemy(app)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'cnsombito@up.edu.ph'      # Your Gmail
+app.config['MAIL_USERNAME'] = 'cnsombito@up.edu.ph'      
 app.config['MAIL_PASSWORD'] = 'qnun jaik iuvo qrsf'         # Gmail App Password
 app.config['MAIL_DEFAULT_SENDER'] = ('LeafList', 'cnsombito@up.edu.ph')
 
@@ -30,7 +53,7 @@ class List(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
-    type = db.Column(db.String(50), nullable=False)  # e.g., personal, shared
+    type = db.Column(db.String(50), nullable=False)  
     tasks = db.relationship('Task', backref='list', cascade="all, delete-orphan")
 
     def __init__(self, owner_id, name, type):
@@ -79,6 +102,15 @@ class Accounts(db.Model):
         self.email = email
         self.password = password
 
+# -------------------- HELPER FUNCTIONS --------------------
+def send_async_email(app, msg):
+    with app.app_context():
+        try:
+            mail.send(msg)
+            print("Email sent successfully!")
+        except Exception as e:
+            print(f"Failed to send email: {e}")
+            
 # -------------------- ROUTES --------------------
 @app.route("/debug/session")
 def debug_session():
@@ -227,18 +259,16 @@ def password_recovery():
     account.password = generate_password_hash(temp_password)
     db.session.commit()
 
-    try:
-        msg = Message(
-            subject="LeafList Password Recovery",
-            recipients=[email],
-            body=f"Hello {account.nameOfUser},\n\nYour temporary password is: {temp_password}\nPlease log in and change it immediately."
-        )
-        mail.send(msg)
-        return jsonify({"success": True, "message": "Temporary password sent to your email."})
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"success": False, "message": "Failed to send email."})
+    # Prepare the message
+    msg = Message(
+        subject="LeafList Password Recovery",
+        recipients=[email],
+        body=f"Hello {account.nameOfUser},\n\nYour temporary password is: {temp_password}\nPlease log in and change it immediately."
+    )
+
+    Thread(target=send_async_email, args=(app, msg)).start()
+
+    return jsonify({"success": True, "message": "Recovery email is being sent."})
 
 # -------------------- TASK ACTIONS --------------------    
 @app.route("/add_task", methods=["POST"]) #ADD TASKS
@@ -366,8 +396,14 @@ def set_current_list():
 
     return jsonify({"success": True})
 
+# -------------------- SETUP ROUTE --------------------
+@app.route("/init_db")
+def init_db():
+    try:
+        db.create_all()
+        return jsonify({"success": True, "message": "Database tables created successfully!"})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)

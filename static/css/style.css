@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
@@ -9,6 +8,7 @@
     --trunk: #6B403C;
     --timber: #7A5350;
     --mint-green: #ADEBB3;
+    --mint-light: #C5F2CA;
     --cream: #FDFBD4;
     --coral-pink: #FF857A;
     --gray: #808080;
@@ -17,6 +17,8 @@
 html, body {
     height: 100%;
     overflow: hidden;
+    font-family: "Lexend", sans-serif;
+    background-color: var(--cream);
 }
 
 /* base.html */
@@ -46,9 +48,7 @@ html, body {
     align-items: center;
     width: 100%;
     font-family: "SUSE Mono", sans-serif;
-    font-optical-sizing: auto;
     font-weight: 800;
-    font-style: normal;
     color: var(--cream);
     padding: 0;
     text-decoration: none;        
@@ -57,10 +57,8 @@ html, body {
 
 .suse-mono-title {
     font-family: "SUSE Mono", sans-serif;
-    font-optical-sizing: auto;
     font-weight: 800;
     font-size: 38px;
-    font-style: normal;
     color: var(--cafe-noir);
     text-align: center;
     margin: 0.2rem;
@@ -69,9 +67,6 @@ html, body {
 
 .lexend-main-section {
     font-family: "Lexend", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 500;
-    font-style: normal;
     background-color: var(--cream);
 }
 
@@ -100,8 +95,36 @@ a {
     text-decoration: none;
 }
 
-/* ========= SWITCHER IN BASE.HTML ========= */
+/* ========= BUTTON OVERRIDES ========= */
+.btn-primary {
+    background-color: var(--trunk);
+    border-color: var(--trunk);
+    color: var(--cream);
+}
 
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: var(--timber);
+    border-color: var(--timber);
+    color: var(--cream);
+}
+
+/* Outline Buttons */
+.btn-outline-danger {
+    border-width: 2px;
+}
+
+.btn-outline-primary {
+    color: var(--trunk);
+    border-color: var(--trunk);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--trunk);
+    color: var(--cream);
+    border-color: var(--trunk);
+}
+
+/* SWITCHER IN BASE.HTML*/
 .switcher-name {
     flex: 1;
     white-space: normal;
@@ -295,13 +318,6 @@ li.switcher-item:hover {
   line-height: 1.2;
 }
 
-.switcher-type {
-  font-size: 0.9rem;
-  color: var(--gray);
-  margin-left: 1.5rem; 
-  margin-top: 0.2rem;
-}
-
 .offcanvas-body button {   
     display: block;
     width: 100%;
@@ -343,6 +359,7 @@ li.switcher-item:hover {
     height: calc(100vh - 260px);
     overflow-y: auto;
     padding-right: 6px;
+    padding-bottom: 80px; /* Space for FAB */
 }
 
 .table-header {
@@ -362,18 +379,28 @@ li.switcher-item:hover {
     margin-left: 0.5rem;
 }
 
-.task-name {
-    margin-left: 0.5rem;
-}
+/* ========= TASK CARD DESIGN ========= */
 
 .card-body {
-    padding: 0.5rem 0;
+    padding: 0.75rem 0;
     background-color: var(--mint-green);
-    border-radius: 5px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(66, 39, 1, 0.1); /* Shadow using cafe-noir */
+    border: 1px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-.card-body:hover, .card-body:active{
-    background-color: #e9bfe9;
+.card-body:hover {
+    transform: translateY(-2px); /* Slight lift */
+    box-shadow: 0 4px 8px rgba(66, 39, 1, 0.15);
+    background-color: var(--mint-light); 
+}
+
+.card-body.checked {
+  background-color: #858c91; 
+  opacity: 0.7;
+  box-shadow: none;
+  transform: none;
 }
 
 .card-body .row {
@@ -382,17 +409,51 @@ li.switcher-item:hover {
     margin-right: 0;
 }
 
-.task-name, .deadline, .actions {
-    white-space: normal;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+/* Typography Improvements */
+.task-name {
+    margin-left: 0.5rem;
+    padding: 0.3rem 0;
+    font-weight: 600; /* Bolder */
+    font-size: 1.05rem;
+    color: var(--cafe-noir);
 }
+
 .deadline {
     margin-left: 4.5rem;
+    font-size: 0.9rem; /* Smaller */
+    color: #5c4a30; /* Lighter/Softer than pure black */
 }
 
 .actions {
     margin-left: 2rem;
+}
+
+/* Action Button Transitions */
+.actions .btn {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.actions .btn:hover {
+    transform: scale(1.1);
+}
+
+/* Custom Badges */
+.badge-high {
+    background-color: var(--coral-pink);
+    color: var(--cafe-noir);
+    font-weight: 500;
+}
+
+.badge-medium {
+    background-color: var(--timber);
+    color: var(--cream);
+    font-weight: 500;
+}
+
+.badge-low {
+    background-color: #6a9c70; /* Darker green */
+    color: var(--cream);
+    font-weight: 500;
 }
 
 .delete-list {
@@ -400,20 +461,32 @@ li.switcher-item:hover {
     padding: 0.25rem 0.5rem;
 }
 
-.task-name {
-    padding: 0.3rem 0;
-}
-
-.btn-outline-danger, .btn-outline-primary {
-    -webkit-text-stroke: 0.3px;
-    border-width: 2px;
-}
-
 .card-body .col-1, .card-body .col-5, 
 .card-body .col-3, .card-body .col-2 {
     flex: 0 0 auto;
 }
 
+/* ========= EMPTY STATE ========= */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--timber);
+    opacity: 0.8;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+    color: var(--mint-green);
+}
+
+.empty-state p {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* ========= FAB ========= */
 .add-task-button {
     position: fixed;
     bottom: 40px;
@@ -436,7 +509,8 @@ li.switcher-item:hover {
     background-color: var(--mint-green);
     color: var(--trunk);
     font-size: 1.6rem;
-    box-shadow: 0 10px 18px rgba(0,0,0,0.12);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    border: none;
 }
 
 .bi-plus-circle-fill {
@@ -459,7 +533,7 @@ li.switcher-item:hover {
 
 .add-btn:hover, .add-btn:focus{
     width: 160px;
-    background-color: var(--mint-green);
+    background-color: var(--mint-light);
     outline: none;
 }
 
@@ -470,6 +544,7 @@ li.switcher-item:hover {
     transform: translateX(0);
 }
 
+/* Toasts */
 .toast-container {
     position: fixed;
     top: 20px;
@@ -564,10 +639,6 @@ li.switcher-item:hover {
     color: var(--cream);
 }
 
-.card-body.checked {
-  background-color: #858c91; 
-}
-
 .sort {
     display: flex;
     justify-content: left;
@@ -591,16 +662,6 @@ li.switcher-item:hover {
     background: #6C757D;
     margin-left: 1rem;
     margin-right: 1rem;
-}
-
-/* ========= INVITE MEMBER BUTTON IN INDEX.HTML ========= */
-
-.shareBtn{
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    color: green;
-    border-width: 2px;
 }
 
 #inviteModal .modal-footer {
@@ -629,4 +690,3 @@ li.switcher-item:hover {
 #inviteModal .modal-body .form-control::placeholder {
     color: var(--gray);
 }
-

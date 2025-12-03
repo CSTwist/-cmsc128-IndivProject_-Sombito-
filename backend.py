@@ -13,22 +13,20 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "default_dev_key")
 
 # -------------------- DATABASE CONFIGURATION --------------------
-# Check if we are on Render by looking for the Turso URL
 turso_db_url = os.environ.get("TURSO_DATABASE_URL")
 turso_auth_token = os.environ.get("TURSO_AUTH_TOKEN")
 
 if turso_db_url and turso_auth_token:
-    # We are on Render! Use the Turso driver.
-    # Fix the URL scheme for SQLAlchemy
-    if turso_db_url.startswith("libsql://"):
-        turso_db_url = turso_db_url.replace("libsql://", "sqlite+libsql://")
+    if "libsql://" in turso_db_url:
+        turso_db_url = turso_db_url.replace("libsql://", "sqlite+libsql+wss://")
     
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"{turso_db_url}?authToken={turso_auth_token}"
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"{turso_db_url}?authToken={turso_auth_token}&secure=true"
+    print("✅ CONNECTED TO TURSO (SECURE)") 
 else:
-    # We are on the laptop! Use the standard local file.
-    # This works without installing sqlalchemy-libsql
+    # Fallback for local development
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo_app.sqlite3'
-    
+    print("⚠️ USING LOCAL SQLITE")
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.permanent_session_lifetime = timedelta(days=5)
 

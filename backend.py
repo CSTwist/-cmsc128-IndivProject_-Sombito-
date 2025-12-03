@@ -17,6 +17,9 @@ turso_db_url = os.environ.get("TURSO_DATABASE_URL")
 turso_auth_token = os.environ.get("TURSO_AUTH_TOKEN")
 
 if turso_db_url and turso_auth_token:
+    turso_db_url = turso_db_url.strip()
+    turso_auth_token = turso_auth_token.strip()
+    
     if turso_db_url.startswith("libsql://"):
         turso_db_url = turso_db_url.replace("libsql://", "sqlite+libsql://")
 

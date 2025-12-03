@@ -3,70 +3,69 @@
 
 {% block content %}
 <div class="main-container">
-  <!-- Logo -->
-  <div class="logo-container">
-    <img 
-      src="{{ url_for('static', filename='images/WebApp LOGO.png') }}" 
-      alt="Logo" 
-      class="logo img-fluid d-block mx-auto rounded-circle"
-    >
-    <h3 class="offcanvas-title" id="offcanvasLabel">LeafList</h3>
-  </div>
-
-  <!-- Left side image -->
+  
   <div class="image-container">
-    <img  src="{{ url_for('static', filename='images/leaves.png') }}" alt="">
+    <div class="logo-container">
+      <img src="{{ url_for('static', filename='images/WebApp LOGO.png') }}" alt="LeafList Logo">
+      <h3>LeafList</h3>
+    </div>
+    <img src="{{ url_for('static', filename='images/leaves.png') }}" alt="Decorative Leaves">
   </div>
 
-  <!-- Login section -->
   <div class="login">
     <form id="loginForm" method="POST" action="{{ url_for('login') }}">
       <h2>Welcome back!</h2>
-      <p class="login-text">Let's get you signed in</p>
+      <p class="login-text">Let's get you signed in to your workspace.</p>
 
       <div class="mb-3">
+        <label for="nm" class="form-label visually-hidden">Username</label>
         <input 
           type="text" 
           class="form-control" 
           id="nm" 
           name="nm" 
-          placeholder="User Name" 
+          placeholder="Username" 
           required
         >
       </div>
 
       <div class="mb-3">
+        <label for="inputEmail" class="form-label visually-hidden">Email</label>
         <input 
           type="email" 
           class="form-control" 
           id="inputEmail" 
           name="email" 
-          placeholder="Email"
+          placeholder="Email address (optional)"
         >
       </div>
 
       <div class="mb-3">
+        <label for="inputPassword" class="form-label visually-hidden">Password</label>
         <input 
           type="password" 
           class="form-control" 
           id="inputPassword" 
           name="password" 
-          placeholder="Enter your password"
+          placeholder="Password"
+          required
         >
         <div class="forgot-password">
           <a class="forgotPasswordLink" href="#" data-bs-toggle="modal" data-bs-target="#passwordRecoveryModal">Forgot password?</a>
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary w-100">Login</button>
+      <button type="submit" class="btn btn-primary w-100 mt-2">Log In</button>
 
       {% if message %}
-        <p class="text-danger text-center mt-2">{{ message }}</p>
+        <div class="alert alert-danger mt-3 text-center" role="alert">
+          {{ message }}
+        </div>
       {% endif %}
 
-      <div class="no-account mt-3 text-center">
+      <div class="no-account">
         Don't have an account?
-        <a href="{{ url_for('signup') }}">Sign up.</a>
+        <a href="{{ url_for('signup') }}">Sign up</a>
       </div>
     </form>
   </div>
@@ -75,20 +74,20 @@
 <!-- Password Recovery Modal -->
 <div class="modal fade" id="passwordRecoveryModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-3">
+    <div class="modal-content p-3 border-0 shadow-lg">
       <div class="modal-header border-0">
-        <h5 class="modal-title w-100">Password Recovery</h5>
+        <h5 class="modal-title w-100" style="font-family: 'SUSE Mono', sans-serif;">Password Recovery</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>Enter your registered email to reset your password:</p>
+        <p class="text-muted mb-3">Enter your registered email address and we'll send you a temporary password.</p>
         <form id="recoveryForm">
           <div class="mb-3">
-            <input type="email" class="form-control" id="recoveryEmail" placeholder="Enter your email" required>
+            <input type="email" class="form-control" id="recoveryEmail" placeholder="name@example.com" required>
           </div>
-          <button type="submit" class="btn btn-primary w-100">Send Recovery Password</button>
+          <button type="submit" class="btn btn-primary w-100">Send Recovery Email</button>
         </form>
-        <p id="recoveryMessage" class="text-center mt-2"></p>
+        <p id="recoveryMessage" class="text-center mt-3 fw-bold"></p>
       </div>
     </div>
   </div>

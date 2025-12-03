@@ -33,11 +33,12 @@
                         <div class="leaf">
                             <i class="bi bi-leaf-fill"></i>
                         </div> 
+                        <!-- Shows the current to do list in the switcher button -->
                         <span class="switcher-name">{{ session['list_name'] if 'list_name' in session else 'List Name' }}</span>
                     </button>
                     <ul class="switcher-dropdown dropdown-menu">
                         <div class="switcher-header">
-                            <span>To Do List Spaces</span>
+                            <span>Your To Do List Spaces</span>
                             <i class="bi bi-plus-square" data-bs-toggle="modal" data-bs-target="#addList"></i>
                         </div>  
                         <!-- Lists will be dynamically loaded here by load_lists.js -->
@@ -45,14 +46,6 @@
                     </ul>
                 </div>
             </div>
-
-      <!-- SHARE BUTTON TO INVITE MEMBERS THRU EMAIL -->
-      <div class="shareBtnContainer">
-        <button type="button" class="shareBtn btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#inviteModal">
-            <i class="bi bi-person-add"></i> 
-            <span>Share List</span>
-        </button>
-      </div>
 
       <!-- DELETE LIST BUTTON -->
       <div class="text-center">
@@ -73,52 +66,6 @@
         </ul>
       </div>
       <button type="button" class="btn btn-outline-secondary" id="asc-desc-toggle"></button>
-    </div>
-
-    <!-- Invite Member Modal -->
-    <div class="modal fade" id="inviteModal" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5 class="modal-title" id="inviteModalLabel">Invite member</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body">
-                <form id="inviteForm">
-                    <label for="inviteEmail" class="form-label">Email</label>
-                    <div class="sendInvite input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Enter email address" aria-label="Enter email address" aria-describedby="button-addon2">
-                        <button class="btn btn-primary" type="button" id="button-addon2">Send invite</button>
-                    </div>
-                    <!-- <div class="mb-3">
-                        <label for="inviteRole" class="form-label">Role</label>
-                        <select id="inviteRole" class="form-select">
-                        <option value="viewer">Viewer</option>
-                        <option value="editor">Editor</option>
-                        <option value="admin">Admin</option>
-                        </select>
-                    </div> -->
-                    <div class="members">
-                        <label for="inviteEmail" class="form-label">Members</label>
-                        <div class="memberEmail">
-                            <i class="bi bi-leaf-fill"></i>
-                            <span class="member">johndoe@email.com</span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            </div>
-
-            </div>
-        </div>
     </div>
 
     

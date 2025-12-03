@@ -17,29 +17,21 @@ turso_db_url = os.environ.get("TURSO_DATABASE_URL")
 turso_auth_token = os.environ.get("TURSO_AUTH_TOKEN")
 
 if turso_db_url and turso_auth_token:
-    # 1. Clean the variables
-    turso_db_url = turso_db_url.replace('"', '').replace("'", "").strip()
-    turso_auth_token = turso_auth_token.replace('"', '').replace("'", "").strip()
 
-    # 2. Prepare URL
     if turso_db_url.startswith("libsql://"):
         turso_db_url = turso_db_url.replace("libsql://", "sqlite+libsql://")
     
-    # 3. Connection Config
     app.config['SQLALCHEMY_DATABASE_URI'] = f"{turso_db_url}?secure=true"
     
-    # 4. CRITICAL FIX: Allow cross-thread usage
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
         "connect_args": {
             "auth_token": turso_auth_token,
-            "check_same_thread": False  # <--- Fixes the deadlock/timeout
+            "check_same_thread": False 
         }
     }
     
-    print(f"✅ CONNECTED TO TURSO") 
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo_app.sqlite3'
-    print("⚠️ USING LOCAL SQLITE")
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.permanent_session_lifetime = timedelta(days=5)
@@ -50,7 +42,7 @@ db = SQLAlchemy(app)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'cnsombito@up.edu.ph'      # Your Gmail
+app.config['MAIL_USERNAME'] = 'cnsombito@up.edu.ph'      
 app.config['MAIL_PASSWORD'] = 'qnun jaik iuvo qrsf'         # Gmail App Password
 app.config['MAIL_DEFAULT_SENDER'] = ('LeafList', 'cnsombito@up.edu.ph')
 
@@ -61,7 +53,7 @@ class List(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
-    type = db.Column(db.String(50), nullable=False)  # e.g., personal, shared
+    type = db.Column(db.String(50), nullable=False)  
     tasks = db.relationship('Task', backref='list', cascade="all, delete-orphan")
 
     def __init__(self, owner_id, name, type):
@@ -274,11 +266,8 @@ def password_recovery():
         body=f"Hello {account.nameOfUser},\n\nYour temporary password is: {temp_password}\nPlease log in and change it immediately."
     )
 
-    # Send in a separate thread so the app doesn't freeze
-    # We pass 'app' because flask-mail needs the application context
     Thread(target=send_async_email, args=(app, msg)).start()
 
-    # Return success immediately without waiting for Gmail
     return jsonify({"success": True, "message": "Recovery email is being sent."})
 
 # -------------------- TASK ACTIONS --------------------    

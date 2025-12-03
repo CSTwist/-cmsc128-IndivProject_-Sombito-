@@ -1,25 +1,17 @@
-/* ==============================
-   FONT IMPORTS
-============================== */
 @import url('https://fonts.googleapis.com/css2?family=SUSE+Mono:wght@100..800&family=Lexend:wght@100..900&display=swap');
 
-/* ==============================
-   GLOBAL VARIABLES
-============================== */
 :root {
   --cafe-noir: #422701;
   --trunk: #6B403C;
   --timber: #7A5350;
   --mint-green: #ADEBB3;
+  --mint-light: #C5F2CA; 
   --cream: #FDFBD4;
   --coral-pink: #FF857A;
   --gray: #808080;
   --purple: #EBAEE6;
 }
 
-/* ==============================
-   GLOBAL RESETS
-============================== */
 * {
   margin: 0;
   padding: 0;
@@ -31,357 +23,190 @@ html, body {
   width: 100%;
   background-color: var(--cream);
   font-family: "Lexend", sans-serif;
+  color: var(--cafe-noir);
 }
 
-/* ==============================
-   BASE / SHARED STYLES
-============================== */
+.btn-primary {
+    background-color: var(--trunk);
+    border-color: var(--trunk);
+    color: var(--cream);
+    padding: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--timber);
+    border-color: var(--timber);
+    color: var(--cream);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(107, 64, 60, 0.3);
+}
+
 .link-light {
   color: var(--cream) !important;
 }
 
-.logo {
-  max-height: 70%;
-}
-
-/* ==============================
-   SIDEBAR (OFFCANVAS)
-============================== */
-.offcanvas.custom {
-  background-color: var(--trunk);
-  width: 293px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow-y: visible;
-  flex-shrink: 0;
-}
-
-.offcanvas-header {
-  display: grid;
-  justify-content: center;
-  align-items: center;
-}
-
-.offcanvas-title {
-  text-align: center;
-  font-family: "SUSE Mono", sans-serif;
-  font-weight: 800;
-  color: var(--cream);
-  font-size: 1.8rem;
-  margin-top: 10px;
-}
-
-.offcanvas.custom a,
-.offcanvas.custom a:link,
-.offcanvas.custom a:visited {
-  display: block;
-  width: 100%;
-  padding: 0.5rem;
-  color: var(--cream) !important;
-  text-decoration: none;
-  font-size: 1.3rem;
-}
-
-.offcanvas.custom a:hover {
-  background-color: var(--timber);
-  border-radius: 5px;
-}
-
-.offcanvas.custom button {
-  display: block;
-  width: 100%;
-  padding: 0.5rem;
-  color: var(--cream) !important;
-  background: none;
-  border: none;
-  text-align: left;
-  font-size: 1.3rem;
-  font-weight: 500;
-}
-
-.offcanvas.custom button:hover {
-  background-color: var(--timber);
-  border-radius: 5px;
-}
-
-.offcanvas.custom .offcanvas-body {
-  padding: 1rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.company-footer {
-  position: fixed;
-  bottom: 10px;
-  font-size: 0.8rem;
-  color: var(--cream);
-}
-
-/* ==============================
-   LAYOUT
-============================== */
+/* LAYOUT */
 .main-container {
   display: flex;
   height: 100vh;
   width: 100vw;
   position: relative;
+  overflow: hidden;
+}
+
+.image-container {
+    width: 55%; 
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--mint-green);
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    object-position: center;
+    opacity: 0.9;
 }
 
 .logo-container {
   position: absolute;
-  top: 20px;
+  top: 30px;
   left: 30px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: var(--cream);
+  gap: 15px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.85); 
+  padding: 10px 20px 10px 10px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .logo-container img {
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
+  object-fit: contain;
+  opacity: 1; 
 }
 
 .logo-container h3 {
-  font-family: "Lexend", sans-serif;
-  font-weight: 600;
+  font-family: "SUSE Mono", sans-serif;
+  font-weight: 800;
   font-size: 1.5rem;
+  color: var(--cafe-noir);
+  margin: 0;
 }
 
-/* ==============================
-   LOGIN & SIGN UP PAGES
-============================== */
-
-/* Left Side: image */
-.image-container {
-    max-width: 60%;
-    height: 100vh;
-    align-items: center; 
-    flex: 1;
-    overflow: hidden;
-}
-.image-container img{
-    min-width: 90%;
-}
-
-/* Right Side: Login & Sign Up Forms */
-
-.login, .sign-up{
-  padding: 100px 30px 30px 30px;
+/* RIGHT SIDE: FORMS */
+.login, .sign-up {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--cream);
+  padding: 2rem;
+  overflow-y: auto; 
 }
 
 #loginForm, #addAccountForm {
-  border: 1px solid #a9a4a4;
-  border-radius: 20px;
-  padding: 2rem;           
-  width: 400px;            
-  max-width: 100%;         
-  flex-shrink: 0;          
-  margin: auto;            
+  width: 100%;
+  max-width: 450px;
+  padding: 3rem;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(66, 39, 1, 0.08);
+  border: 1px solid rgba(0,0,0,0.02);
 }
 
-.signUpHeader {
-  padding: 1rem 1rem 1rem 0;
+h2 {
+    font-family: "SUSE Mono", sans-serif;
+    color: var(--trunk);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
 }
 
-#loginForm, #addAccountForm{
-  border: 1px solid #a9a4a4;
-  border-radius: 5%;
-  padding: 2rem;
-  margin:auto 5rem 5rem 2rem;
+.login-text {
+    color: var(--gray);
+    margin-bottom: 2rem;
 }
 
-.forgotPasswordLink {
-  font-size: 14px;
+/* FORM ELEMENTS */
+.form-control {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    background-color: #fff;
+    border-color: var(--mint-green);
+    box-shadow: 0 0 0 4px var(--mint-light); 
 }
 
 .forgot-password {
-  margin-top: 5px;
+  margin-top: 8px;
   text-align: right;
 }
 
 .forgot-password a {
-  font-size: 12px;
-  font-style: italic;
-  display: inline-block;
+  font-size: 0.9rem;
+  color: var(--timber);
   text-decoration: none;
-  opacity: 0.9;
+  font-weight: 500;
 }
+
 .forgot-password a:hover {
   text-decoration: underline;
+  color: var(--trunk);
 }
 
-.no-account {
-  margin-bottom: 1rem;
-  font-size: 14px;
-}
-
-.create-account {
-  margin-top: 0.6rem;
-}
-
-.login-text {
-  margin: 1rem 1rem 1rem auto;
-  font-size: 14px;
+.no-account, .login-text-bottom {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
   text-align: center;
+  color: var(--gray);
 }
 
-
-/* ==============================
-   PROFILE PAGE
-============================== */
-.profile-body {
-  margin-left: 90px;
-  min-height: 100vh;
-  min-width: 70vw;
-  background-color: var(--cream);
-  padding: 60px 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  color: var(--cafe-noir);
+.no-account a, .login-text-bottom a {
+    color: var(--trunk);
+    font-weight: 600;
+    text-decoration: none;
 }
 
-.profile-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
+.no-account a:hover, .login-text-bottom a:hover {
+    text-decoration: underline;
 }
 
-.profile-header h1 {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--cafe-noir);
-}
+/*RESPONSIVE*/
+@media (max-width: 900px) {
+    .main-container {
+        flex-direction: column;
+    }
+    
+    .image-container {
+        width: 100%;
+        height: 250px; 
+        flex: none;
+    }
+    
+    .logo-container {
+        top: 20px;
+        left: 20px;
+        transform: scale(0.9);
+        transform-origin: top left;
+    }
 
-/* ==============================
-   EDIT BUTTON
-============================== */
-.edit-btn {
-  background-color: var(--purple);
-  border: none;
-  color: var(--cafe-noir);
-  padding: 10px 20px;
-  font-weight: 600;
-  border-radius: 5px;
-  transition: 0.3s ease;
-}
-
-.edit-btn:hover {
-  background-color: var(--mint-green);
-}
-
-/* ==============================
-   PROFILE CARD
-============================== */
-.edit-profile {
-  width: 100%;
-  border-radius: 10px;
-  border: 1px solid #a9a4a4;
-  background: var(--cream);
-  padding: 25px 30px;
-  margin-bottom: 40px;
-}
-
-.edit-profile label {
-  font-weight: 500;
-  display: block;
-  margin-bottom: 6px;
-}
-
-.edit-profile input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-/* ==============================
-   PASSWORD SECTION
-============================== */
-.password {
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.password-btn {
-  background-color: var(--purple);
-  color: var(--cafe-noir);
-  border: 1px solid #886565;
-  padding: 8px 15px;
-  border-radius: 6px;
-  font-weight: 600;
-  transition: 0.3s ease;
-  width: fit-content;
-}
-
-.password-btn:hover {
-  background-color: var(--mint-green);
-}
-
-/* ==============================
-   FORM FOOTER (SAVE/CANCEL)
-============================== */
-.form-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: auto;
-  display: none; /* hidden initially */
-}
-
-.cancel-btn,
-.save-changes-btn {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  transition: 0.3s ease;
-}
-
-.cancel-btn {
-  background-color: var(--gray);
-  color: white;
-}
-
-.save-changes-btn {
-  background-color: var(--purple);
-  color: var(--cafe-noir);
-}
-
-.save-changes-btn:hover {
-  background-color: var(--mint-green);
-}
-
-/* ==============================
-   MODAL STYLES
-============================== */
-.modal-header.bg-success {
-  background-color: #198754 !important;
-}
-
-.modal-content {
-  border-radius: 10px;
-}
-
-/* ==============================
-   RESPONSIVE
-============================== */
-@media (max-width: 992px) {
-  .offcanvas.custom {
-    position: relative;
-    width: 100%;
-    height: auto;
-  }
-
-  .profile-body {
-    margin-left: 0;
-    padding: 20px;
-  }
+    #loginForm, #addAccountForm {
+        padding: 2rem;
+        box-shadow: none; 
+        background: transparent;
+    }
 }

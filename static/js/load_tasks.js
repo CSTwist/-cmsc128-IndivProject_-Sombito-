@@ -4,11 +4,13 @@ let sortDirection = "asc";  // default ascending
 
 async function loadTasks(sortBy = null) {
   const selectedListId = currentList;
+  const container = document.getElementById("taskContainer");
+
     if (!selectedListId) {
-      const container = document.getElementById("taskContainer");
       container.innerHTML = `
-        <div class="alert alert-secondary text-center">
-            Please choose a list to display
+        <div class="empty-state">
+            <i class="bi bi-list-task"></i>
+            <p>Please choose a list to display</p>
         </div>
       `;
       return;
@@ -28,6 +30,16 @@ async function loadTasks(sortBy = null) {
   }
 
   tasks = await response.json();
+
+  if (tasks.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+            <i class="bi bi-tree"></i>
+            <p>No tasks yet. Enjoy your free time!</p>
+        </div>
+      `;
+      return;
+  }
 
   // Apply sorting if currentSort is set
   if (sortBy) {
@@ -50,12 +62,16 @@ async function loadTasks(sortBy = null) {
     });
   }
 
-  const container = document.getElementById("taskContainer");
   container.innerHTML = "";
 
   tasks.forEach((task) => {
     const card = document.createElement("div");
-    card.className = "card mb-3";
+    card.className = "card mb-3 border-0 bg-transparent"; 
+
+    // Determine badge class based on priority
+    let badgeClass = "badge-low";
+    if (task.priority === "High") badgeClass = "badge-high";
+    else if (task.priority === "Medium") badgeClass = "badge-medium";
 
     card.innerHTML = `
       <div class="card-body">
@@ -65,15 +81,12 @@ async function loadTasks(sortBy = null) {
           </div>
             <div class="task-name col-4">
               ${task.name} 
-              <span class="badge bg-${
-                task.priority === "High"
-                  ? "danger"
-                  : task.priority === "Medium"
-                  ? "warning text-dark"
-                  : "success"
-              } ms-2">${task.priority}</span>
+              <span class="badge ${badgeClass} ms-2">${task.priority}</span>
             </div>
-          <div class="deadline col-3">${task.deadline} ${task.time}</div>
+          <div class="deadline col-3">
+            <i class="bi bi-calendar-event me-1"></i>${task.deadline} 
+            <i class="bi bi-clock ms-2 me-1"></i>${task.time}
+          </div>
           <div class="actions col-2 text-center">
             <button class="edit-task btn btn-sm btn-outline-primary" 
                     data-id="${task.id}" 
@@ -165,12 +178,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Asc/Desc button
-  toggleButton.innerHTML = "Ascending"; // default label
+  toggleButton.innerHTML = "Ascending"; 
 
   toggleButton.addEventListener("click", () => {
     sortDirection = sortDirection === "asc" ? "desc" : "asc";
     toggleButton.innerHTML = sortDirection === "asc" ? "Ascending" : "Descending";
 
-    loadTasks(); // reload with new direction
+    loadTasks(); 
   });
 });

@@ -5,6 +5,12 @@ Running the WebApp:
   To run our WebApp, run the backend.py in an IDE and then open http://127.0.0.1:5000/ in a browser
 
 API Endpoints:
+MultiAccounts API (Assignment 3):
+  1) Add List
+     - Takes a JSON with the To do list name and type -- either _personal_ or _shared_ for the current user.
+  2) Delete List
+     - Deletes the currently selected To do list of the user.
+
 Accounts API (Assignment 2):
   1) Add Account
      - Takes a JSON with name of user, username, email, and password

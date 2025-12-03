@@ -17,17 +17,17 @@ turso_db_url = os.environ.get("TURSO_DATABASE_URL")
 turso_auth_token = os.environ.get("TURSO_AUTH_TOKEN")
 
 if turso_db_url and turso_auth_token:
-    turso_db_url = turso_db_url.strip()
-    turso_auth_token = turso_auth_token.strip()
-    
+    turso_auth_token = turso_auth_token.replace('"', '').replace("'", "").strip()
+    turso_db_url = turso_db_url.replace('"', '').replace("'", "").strip()
+
+    print(f"Token Length: {len(turso_auth_token)}") 
+
     if turso_db_url.startswith("libsql://"):
         turso_db_url = turso_db_url.replace("libsql://", "sqlite+libsql://")
 
     app.config['SQLALCHEMY_DATABASE_URI'] = f"{turso_db_url}?authToken={turso_auth_token}&secure=true"
-    
-    print("✅ CONNECTED TO TURSO (with secure=true)") 
+    print("✅ CONNECTED TO TURSO (Secure)")
 else:
-    # Fallback for local development
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo_app.sqlite3'
     print("⚠️ USING LOCAL SQLITE")
 

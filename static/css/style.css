@@ -664,29 +664,33 @@ li.switcher-item:hover {
     margin-right: 1rem;
 }
 
-#inviteModal .modal-footer {
-    display: flex;
-    justify-content: flex-start; 
-    gap: 0.5rem; 
+/* ========= PROFILE PAGE ========= */
+.profile-body {
+    padding: 2rem;
+    max-width: 1000px;
 }
 
-#inviteModal .modal-body {
-    color: var(--cafe-noir); 
-}
-
-#inviteModal .modal-body label,
-#inviteModal .modal-body .form-label {
+.profile-header h1 {
     color: var(--cafe-noir);
 }
 
-#inviteModal .modal-body .form-label {
-    font-size: 18px;
+.edit-profile label {
+    color: var(--cafe-noir);
+    font-weight: 500;
 }
 
-#inviteModal .modal-body .form-control {
-    color: var(--cafe-noir); 
+.edit-profile .form-control {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: var(--cafe-noir);
 }
 
-#inviteModal .modal-body .form-control::placeholder {
-    color: var(--gray);
+.edit-profile .form-control:focus {
+    border-color: var(--timber);
+    box-shadow: 0 0 0 0.25rem rgba(122, 83, 80, 0.25);
+}
+
+.password {
+    background-color: var(--mint-green);
+    border: 1px solid var(--timber);
 }

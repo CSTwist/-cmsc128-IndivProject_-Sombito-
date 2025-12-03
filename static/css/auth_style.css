@@ -157,10 +157,11 @@ h2 {
 }
 
 .forgot-password a {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--timber);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 400;
+  font-style: italic;
 }
 
 .forgot-password a:hover {

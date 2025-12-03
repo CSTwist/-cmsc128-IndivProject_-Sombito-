@@ -1,4 +1,5 @@
 import os
+from threading import Thread
 from flask import Flask, jsonify, redirect, url_for, render_template, request, session
 from datetime import timedelta, datetime, UTC
 from flask_sqlalchemy import SQLAlchemy
@@ -9,7 +10,7 @@ import string
 
 # -------------------- FLASK SETUP --------------------
 app = Flask(__name__)
-app.secret_key = "your_secret_key"
+app.secret_key = os.environ.get("SECRET_KEY", "default_dev_key")
 
 # -------------------- DATABASE CONFIGURATION --------------------
 # Check if we are on Render by looking for the Turso URL
@@ -97,6 +98,15 @@ class Accounts(db.Model):
         self.email = email
         self.password = password
 
+# -------------------- HELPER FUNCTIONS --------------------
+def send_async_email(app, msg):
+    with app.app_context():
+        try:
+            mail.send(msg)
+            print("Email sent successfully!")
+        except Exception as e:
+            print(f"Failed to send email: {e}")
+            
 # -------------------- ROUTES --------------------
 @app.route("/debug/session")
 def debug_session():
@@ -245,18 +255,19 @@ def password_recovery():
     account.password = generate_password_hash(temp_password)
     db.session.commit()
 
-    try:
-        msg = Message(
-            subject="LeafList Password Recovery",
-            recipients=[email],
-            body=f"Hello {account.nameOfUser},\n\nYour temporary password is: {temp_password}\nPlease log in and change it immediately."
-        )
-        mail.send(msg)
-        return jsonify({"success": True, "message": "Temporary password sent to your email."})
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"success": False, "message": "Failed to send email."})
+    # Prepare the message
+    msg = Message(
+        subject="LeafList Password Recovery",
+        recipients=[email],
+        body=f"Hello {account.nameOfUser},\n\nYour temporary password is: {temp_password}\nPlease log in and change it immediately."
+    )
+
+    # Send in a separate thread so the app doesn't freeze
+    # We pass 'app' because flask-mail needs the application context
+    Thread(target=send_async_email, args=(app, msg)).start()
+
+    # Return success immediately without waiting for Gmail
+    return jsonify({"success": True, "message": "Recovery email is being sent."})
 
 # -------------------- TASK ACTIONS --------------------    
 @app.route("/add_task", methods=["POST"]) #ADD TASKS

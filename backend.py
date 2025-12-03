@@ -16,6 +16,11 @@ app.secret_key = os.environ.get("SECRET_KEY", "default_dev_key")
 turso_db_url = os.environ.get("TURSO_DATABASE_URL")
 turso_auth_token = os.environ.get("TURSO_AUTH_TOKEN")
 
+print("DB URL:", repr(turso_db_url))
+print("AUTH TOKEN:", repr(turso_auth_token))
+print("AUTH LENGTH:", len(turso_auth_token) if turso_auth_token else "None")
+
+
 if turso_db_url and turso_auth_token:
     turso_auth_token = turso_auth_token.replace('"', '').replace("'", "").replace("\n", "").strip()
     turso_db_url = turso_db_url.replace('"', '').replace("'", "").strip()

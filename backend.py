@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, redirect, url_for, render_template, request, session
 from datetime import timedelta, datetime, UTC
 from flask_sqlalchemy import SQLAlchemy
@@ -9,7 +10,24 @@ import string
 # -------------------- FLASK SETUP --------------------
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo_app.sqlite3'
+
+# -------------------- DATABASE CONFIGURATION --------------------
+# Check if we are on Render by looking for the Turso URL
+turso_db_url = os.environ.get("libsql://cmsc128todolistapp-cstwist.aws-ap-northeast-1.turso.io")
+turso_auth_token = os.environ.get("eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NjQ3NjYzODIsImlkIjoiMGRkZDlkOWMtNzFhOC00NjdiLTg3Y2QtYzU3NzFlNzY4ODc3IiwicmlkIjoiMTcyODhjYjItNDFlNS00MDA3LWIzNjctZjBlNTViMmMzYWQ3In0.VcbLf6HGxm1V12Bu74MknwM8FlVXVGw5mRnoioU_zbZqtMupE8L3vNit1osll56uzWw-e-h-QVPbpOJTm8JtDA")
+
+if turso_db_url and turso_auth_token:
+    # We are on Render! Use the Turso driver.
+    # Fix the URL scheme for SQLAlchemy
+    if turso_db_url.startswith("libsql://"):
+        turso_db_url = turso_db_url.replace("libsql://", "sqlite+libsql://")
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"{turso_db_url}?authToken={turso_auth_token}"
+else:
+    # We are on the laptop! Use the standard local file.
+    # This works without installing sqlalchemy-libsql
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo_app.sqlite3'
+    
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.permanent_session_lifetime = timedelta(days=5)
 

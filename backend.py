@@ -14,8 +14,8 @@ app.secret_key = os.environ.get("SECRET_KEY", "default_dev_key")
 
 # -------------------- DATABASE CONFIGURATION --------------------
 # Check if we are on Render by looking for the Turso URL
-turso_db_url = os.environ.get("libsql://cmsc128todolistapp-cstwist.aws-ap-northeast-1.turso.io")
-turso_auth_token = os.environ.get("eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NjQ3NjYzODIsImlkIjoiMGRkZDlkOWMtNzFhOC00NjdiLTg3Y2QtYzU3NzFlNzY4ODc3IiwicmlkIjoiMTcyODhjYjItNDFlNS00MDA3LWIzNjctZjBlNTViMmMzYWQ3In0.VcbLf6HGxm1V12Bu74MknwM8FlVXVGw5mRnoioU_zbZqtMupE8L3vNit1osll56uzWw-e-h-QVPbpOJTm8JtDA")
+turso_db_url = os.environ.get("TURSO_DATABASE_URL")
+turso_auth_token = os.environ.get("TURSO_AUTH_TOKEN")
 
 if turso_db_url and turso_auth_token:
     # We are on Render! Use the Turso driver.

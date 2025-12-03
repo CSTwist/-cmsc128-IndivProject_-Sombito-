@@ -17,24 +17,28 @@ turso_db_url = os.environ.get("TURSO_DATABASE_URL")
 turso_auth_token = os.environ.get("TURSO_AUTH_TOKEN")
 
 if turso_db_url and turso_auth_token:
+    # 1. Clean the variables
     turso_db_url = turso_db_url.replace('"', '').replace("'", "").strip()
     turso_auth_token = turso_auth_token.replace('"', '').replace("'", "").strip()
 
+    # 2. Prepare URL
     if turso_db_url.startswith("libsql://"):
         turso_db_url = turso_db_url.replace("libsql://", "sqlite+libsql://")
     
+    # 3. Connection Config
     app.config['SQLALCHEMY_DATABASE_URI'] = f"{turso_db_url}?secure=true"
     
+    # 4. CRITICAL FIX: Allow cross-thread usage
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
         "connect_args": {
-            "auth_token": turso_auth_token
+            "auth_token": turso_auth_token,
+            "check_same_thread": False  # <--- Fixes the deadlock/timeout
         }
     }
     
-    print(f"✅ CONNECTED TO TURSO (Token via connect_args)") 
+    print(f"✅ CONNECTED TO TURSO") 
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo_app.sqlite3'
-    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {} # Clear options for local dev
     print("⚠️ USING LOCAL SQLITE")
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

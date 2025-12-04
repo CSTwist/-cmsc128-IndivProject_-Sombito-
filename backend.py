@@ -112,10 +112,16 @@ def send_async_email(app, msg):
             print(f"Failed to send email: {e}")
             
 # -------------------- ROUTES --------------------
-@app.route("/debug/session")
-def debug_session():
-    from flask import jsonify, session
-    return jsonify({k: v for k, v in session.items()})
+@app.after_request
+def after_request(response):
+    """
+    Ensure responses aren't cached so that the back button 
+    doesn't show sensitive pages after logout.
+    """
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 @app.route("/")
 def home():

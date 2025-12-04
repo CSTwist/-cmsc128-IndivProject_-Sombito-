@@ -112,10 +112,12 @@ def send_async_email(app, msg):
             print(f"Failed to send email: {e}")
             
 # -------------------- ROUTES --------------------
-@app.route("/debug/session")
-def debug_session():
-    from flask import jsonify, session
-    return jsonify({k: v for k, v in session.items()})
+@app.after_request
+def after_request(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 @app.route("/")
 def home():
@@ -396,14 +398,7 @@ def set_current_list():
 
     return jsonify({"success": True})
 
-# -------------------- SETUP ROUTE --------------------
-@app.route("/init_db")
-def init_db():
-    try:
-        db.create_all()
-        return jsonify({"success": True, "message": "Database tables created successfully!"})
-    except Exception as e:
-        return jsonify({"success": False, "message": str(e)})
-
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)

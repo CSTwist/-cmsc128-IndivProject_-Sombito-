@@ -398,13 +398,7 @@ def set_current_list():
 
     return jsonify({"success": True})
 
-@app.route("/init_db")
-def init_db():
-    try:
-        db.create_all()
-        return jsonify({"success": True, "message": "Database tables created successfully!"})
-    except Exception as e:
-        return jsonify({"success": False, "message": str(e)})
-    
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)

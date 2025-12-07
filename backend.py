@@ -398,7 +398,7 @@ def set_current_list():
 
     return jsonify({"success": True})
 
-@app.route("init_data")
+@app.route("/init_data")
 def init_data():
     with app.app_context():
         db.create_all()

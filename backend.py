@@ -398,7 +398,10 @@ def set_current_list():
 
     return jsonify({"success": True})
 
-if __name__ == "__main__":
+@app.route("init_data")
+def init_data():
     with app.app_context():
         db.create_all()
+    
+if __name__ == "__main__":
     app.run(debug=True)

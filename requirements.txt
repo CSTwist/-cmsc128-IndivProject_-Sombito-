@@ -1,0 +1,6 @@
+Flask
+Flask-SQLAlchemy
+Flask-Mail
+sqlalchemy-libsql
+libsql-experimental
+gunicorn

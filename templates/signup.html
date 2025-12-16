@@ -1,0 +1,65 @@
+{% extends "auth_base.html"%}
+{% block title %} Sign Up {% endblock %}
+
+{% block content %}
+<div class="main-container">
+
+    <div class="image-container">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/WebApp LOGO.png') }}" alt="LeafList Logo">
+            <h3>LeafList</h3>
+        </div>
+        <img src="{{ url_for('static', filename='images/leaves.png') }}" alt="Decorative Leaves">
+    </div>
+
+    <div class="sign-up">
+        <form id="addAccountForm">
+            <h2 class="signUpHeader">Create Account</h2>
+            <p class="login-text">Join us and start organizing your life today.</p>
+
+            <div class="mb-3">
+                <input type="text" class="form-control" id="nameOfUser" placeholder="Full Name" required>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="username" placeholder="Username" required>
+            </div>
+            <div class="mb-3">
+                <input type="email" class="form-control" id="email" placeholder="Email Address" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" id="password" placeholder="Password" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+            </div>
+
+            <button type="submit" class="create-account btn btn-primary w-100 mt-2">Sign Up</button>
+
+            <div class="login-text-bottom">
+                Already have an account?
+                <a href="{{ url_for('login') }}">Log in</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4 border-0 shadow-lg">
+      <div class="modal-header border-0 justify-content-center">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+      </div>
+      <div class="modal-body">
+        <h4 class="modal-title mb-2" id="successModalLabel" style="font-family: 'SUSE Mono', sans-serif;">Welcome Aboard!</h4>
+        <p class="text-muted">Your account has been successfully created.</p>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn btn-primary w-100" id="goToLogin">Go to Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/add_account.js') }}"></script>
+{% endblock %}

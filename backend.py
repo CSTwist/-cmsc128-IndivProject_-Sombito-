@@ -43,7 +43,7 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'cnsombito@up.edu.ph'      
-app.config['MAIL_PASSWORD'] = 'qnun jaik iuvo qrsf'         # Gmail App Password
+app.config['MAIL_PASSWORD'] = 'MAIL_API'         
 app.config['MAIL_DEFAULT_SENDER'] = ('LeafList', 'cnsombito@up.edu.ph')
 
 mail = Mail(app)
